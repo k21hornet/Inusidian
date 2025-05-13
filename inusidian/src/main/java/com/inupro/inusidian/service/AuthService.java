@@ -1,6 +1,10 @@
 package com.inupro.inusidian.service;
 
 import com.inupro.inusidian.config.JwtUtil;
+import com.inupro.inusidian.entity.User;
+import com.inupro.inusidian.entity.dto.UserDTO;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +15,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final UserService userService;
 
-    public AuthService(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public AuthService(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.userService = userService;
     }
 
     public ResponseEntity<?> authenticateAndSetCookie(String email, String password) {
@@ -43,5 +51,36 @@ public class AuthService {
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
+    }
+
+    public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("jwt")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String email = jwtUtil.extractEmail(token);
+        Optional<User> user = userService.findByEmail(email);
+
+        if(user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("不正なtokenです");
+        }
+
+        UserDTO responseUser = new UserDTO();
+        responseUser.setId(user.get().getId());
+        responseUser.setUsername(user.get().getUsername());
+        responseUser.setEmail(user.get().getEmail());
+        responseUser.setCreatedAt(user.get().getCreatedAt());
+        responseUser.setUpdatedAt(user.get().getUpdatedAt());
+        return ResponseEntity.ok().body(responseUser);
     }
 }
