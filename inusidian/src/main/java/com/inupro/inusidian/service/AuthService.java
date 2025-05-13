@@ -5,6 +5,7 @@ import com.inupro.inusidian.entity.User;
 import com.inupro.inusidian.entity.dto.UserDTO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -82,5 +83,16 @@ public class AuthService {
         responseUser.setCreatedAt(user.get().getCreatedAt());
         responseUser.setUpdatedAt(user.get().getUpdatedAt());
         return ResponseEntity.ok().body(responseUser);
+    }
+
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("jwt", "")
+                .httpOnly(true)
+                .path("/")
+                .maxAge(0) // 即時削除
+                .build();
+        return ResponseEntity.ok()
+                .header("Set-Cookie", cookie.toString())
+                .body("ログアウトしました");
     }
 }
