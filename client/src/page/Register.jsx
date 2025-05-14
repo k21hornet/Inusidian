@@ -31,59 +31,63 @@ const Register = () => {
   }
   
   return (
-    <div>
-      <h1>新規登録</h1>
+    <div className="container mt-5" style={{ maxWidth: '400px' }}>
+      <h2 className="mb-4 text-center">新規登録</h2>
 
       <div>
         <form onSubmit={register}>
-          <div>
-            <label>ユーザー名</label>
+          <div className="mb-3">
+            <label className="form-label small">ユーザー名</label>
             <input
               type="username"
               name="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              className="form-control"
             />
           </div>
 
-          <div>
-            <label>メールアドレス</label>
+          <div className="mb-3">
+            <label className="form-label small">メールアドレス</label>
             <input
               type="email"
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="form-control"
             />
           </div>
 
-          <div>
-            <label>パスワード</label>
+          <div className="mb-3">
+            <label className="form-label small">パスワード</label>
             <input
               type="password"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="form-control"
             />
           </div>
 
-          <div>
-            <label>パスワード確認用</label>
+          <div className="mb-3">
+            <label className="form-label small">パスワード確認用</label>
             <input
               type="password"
               name="passwordConfirm"
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
               required
+              className="form-control"
             />
           </div>
 
-          <button type="submit">アカウント登録</button>
+          <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">アカウント登録</button>
         </form>
 
-        <Link to={"/login"}>アカウントをお持ちの方はこちら</Link>
+        <Link to={"/login"} className='custom-a-link'>アカウントをお持ちの方はこちら</Link>
       </div>
     </div>
   )

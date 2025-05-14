@@ -28,36 +28,38 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <h1>ログイン</h1>
+    <div className="container mt-5" style={{ maxWidth: '400px', fontFamily: "'Poppins', sans-serif" }}>
+      <h2 className="mb-4 text-center">ログイン</h2>
 
       <div>
         <form onSubmit={login}>
-          <div>
-            <label>メールアドレス</label>
+          <div className="mb-3">
+            <label className="form-label small">メールアドレス</label>
             <input
               type="email"
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="form-control"
             />
           </div>
 
-          <div>
-            <label>パスワード</label>
+          <div className="mb-3">
+            <label className="form-label small">パスワード</label>
             <input
               type="password"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="form-control"
             />
           </div>
-          <button type="submit">ログイン</button>
+          <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">ログイン</button>
         </form>
 
-        <Link to={"/register"}>アカウントをお持ちでない方はこちら</Link>
+        <Link to={"/register"} className='custom-a-link'>アカウントをお持ちでない方はこちら</Link>
       </div>
     </div>
   )
