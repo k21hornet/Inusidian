@@ -32,12 +32,12 @@ const Register = () => {
   
   return (
     <div className="container mt-5" style={{ maxWidth: '400px' }}>
-      <h1 className="mb-4 text-center">新規登録</h1>
+      <h2 className="mb-4 text-center">新規登録</h2>
 
       <div>
         <form onSubmit={register}>
           <div className="mb-3">
-            <label className="form-label">ユーザー名</label>
+            <label className="form-label small">ユーザー名</label>
             <input
               type="username"
               name="username"
@@ -49,7 +49,7 @@ const Register = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">メールアドレス</label>
+            <label className="form-label small">メールアドレス</label>
             <input
               type="email"
               name="email"
@@ -61,7 +61,7 @@ const Register = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">パスワード</label>
+            <label className="form-label small">パスワード</label>
             <input
               type="password"
               name="password"
@@ -73,7 +73,7 @@ const Register = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">パスワード確認用</label>
+            <label className="form-label small">パスワード確認用</label>
             <input
               type="password"
               name="passwordConfirm"
@@ -84,10 +84,10 @@ const Register = () => {
             />
           </div>
 
-          <button type="submit" className="mb-3 btn btn-primary w-100">アカウント登録</button>
+          <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">アカウント登録</button>
         </form>
 
-        <Link to={"/login"}>アカウントをお持ちの方はこちら</Link>
+        <Link to={"/login"} className='custom-a-link'>アカウントをお持ちの方はこちら</Link>
       </div>
     </div>
   )

@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+/* カスタムボタン色 */
+.custom-btn-blue {
+    background-color: #4f39f6;
+}
+
+.custom-btn-blue:hover {
+    background-color: #615fff;
+}
+
+.custom-a-link {
+    color: #4f39f6;
+    text-decoration: none;
+}
+
+.custom-a-link:hover {
+    color: #615fff;
+    text-decoration: none;
+}
