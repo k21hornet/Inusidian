@@ -44,6 +44,7 @@ const Home = () => {
         deck,
         { withCredentials: true })
       if (res.status===200) {
+        fetchDecks()
         setDeckName("")
         setDeckDescription("")
         closeModal()
@@ -82,41 +83,14 @@ const Home = () => {
         {decks.map((deck) => (
           <li className="list-group-item d-flex justify-content-between">
             <div>
-              <div>{deck?.name}</div>
-              <div>{deck?.description}</div>
+              <div>{deck?.deckName}</div>
+              <div>{deck?.deckDescription}</div>
             </div>
             <div>
               100単語
             </div>
           </li>
         ))}
-          <li className="list-group-item d-flex justify-content-between">
-            <div>
-              <div>デッキ１</div>
-              <div>デッキ詳細文１</div>
-            </div>
-            <div>
-              100単語
-            </div>
-          </li>
-          <li className="list-group-item d-flex justify-content-between">
-            <div>
-              <div>デッキ２</div>
-              <div>デッキ詳細文２あああああああああ</div>
-            </div>
-            <div>
-              40単語
-            </div>
-          </li>
-          <li className="list-group-item d-flex justify-content-between">
-            <div>
-              <div>デッキ３</div>
-              <div>デッキ詳細文３ああああああああああああああああ</div>
-            </div>
-            <div>
-              3000単語
-            </div>
-          </li>
         </ul>
         </div>
       </div>
