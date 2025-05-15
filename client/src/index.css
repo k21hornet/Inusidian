@@ -18,3 +18,16 @@
     color: #615fff;
     text-decoration: none;
 }
+
+.custom-nav-link {
+    color: #6c757d; /* text-muted */
+    transition: color 0.2s;
+}
+  
+.custom-nav-link:hover {
+    color: #615fff;
+}
+
+.custom-font-size {
+    font-size: 12px;
+}
