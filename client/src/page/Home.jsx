@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
 import Header from '../components/Header'
 
@@ -13,6 +13,8 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+
+  const navigate = useNavigate()
 
 
   // デッキ一覧を取得
@@ -55,6 +57,10 @@ const Home = () => {
     }
   }
 
+  const navigateToDeck = (id) => {
+    navigate(`/deck/${id}`)
+  }
+
 
   useEffect(() => {
     fetchDecks()
@@ -75,13 +81,22 @@ const Home = () => {
       >
         <div className="card-header d-flex justify-content-between align-items-center">
           <div>デッキ一覧</div>
-          <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">デッキ追加</button>
+          <div>
+            <button className="custom-font-size btn custom-btn-blue text-white rounded-pill">デッキ編集</button>
+            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">デッキ追加</button>
+          </div>
         </div>
 
         <div className="card-body d-flex flex-column align-items-center">
         <ul className="w-100 list-group list-group-flush">
         {decks.map((deck) => (
-          <li className="list-group-item d-flex justify-content-between">
+          <li 
+            className="list-group-item d-flex justify-content-between"
+            style={{
+              cursor: 'pointer'
+            }}
+            onClick={() => navigateToDeck(deck.id)}
+          >
             <div>
               <div>{deck?.deckName}</div>
               <div>{deck?.deckDescription}</div>
