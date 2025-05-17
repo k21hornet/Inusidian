@@ -8,27 +8,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "decks")
+@Table(name = "cards")
 @Data
 @NoArgsConstructor
-public class Deck {
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer userId;
-
-    private String deckName;
-
-    private String deckDescription;
+    @ManyToOne
+    @JoinColumn(name = "deck_id", nullable = false)
+    private Deck deck;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "deck")
-    private List<Card> cards;
+    @OneToMany(mappedBy = "card")
+    private List<CardValue> cardValues;
 
     @PrePersist
     protected void onCreate() {
@@ -40,5 +38,4 @@ public class Deck {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
 }

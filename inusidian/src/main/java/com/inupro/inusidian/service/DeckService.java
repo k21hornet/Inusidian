@@ -51,11 +51,6 @@ public class DeckService {
         // エンティティにリレーション書かなければ圧倒的に楽になるけど教科書的ではないし
         DeckValueDTO deckValueDTO = new DeckValueDTO();
         deckValueDTO.setDeckDTO(createDeckDTO(deck));
-        List<DeckAttributeDTO> attributeDTOs = new ArrayList<>();
-        for (DeckAttribute attribute : deck.getDeckAttributes()) {
-            attributeDTOs.add(deckAttributeService.createDeckAttributeDTO(attribute));
-        }
-        deckValueDTO.setDeckAttributeDTOs(attributeDTOs);
         return deckValueDTO;
     }
 

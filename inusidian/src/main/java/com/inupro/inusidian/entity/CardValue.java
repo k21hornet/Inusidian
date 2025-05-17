@@ -5,30 +5,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "decks")
+@Table(name = "card_values")
 @Data
 @NoArgsConstructor
-public class Deck {
+public class CardValue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "deck_attribute_id", nullable = false)
+    private DeckAttribute deckAttribute;
 
-    private String deckName;
+    @ManyToOne
+    @JoinColumn(name = "card_id", nullable = false)
+    private Card card;
 
-    private String deckDescription;
+    private String attributeValue;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "deck")
-    private List<Card> cards;
 
     @PrePersist
     protected void onCreate() {
@@ -40,5 +40,4 @@ public class Deck {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
 }

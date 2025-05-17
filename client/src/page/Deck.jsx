@@ -4,7 +4,8 @@ import Header from '../components/Header'
 import { useParams } from 'react-router-dom'
 
 const Deck = () => {
-  const [deck, setDeck] = useState([])
+  const [deck, setDeck] = useState()
+  const [cards, setCards] = useState([])
 
   const { id } = useParams()
 
@@ -21,8 +22,22 @@ const Deck = () => {
     }
   }
 
+  // カード一覧取得
+  const fetchCards = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API}/card/cards/${id}`, { withCredentials: true })
+      if(res.status===200) {
+        setCards(res.data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   useEffect(() => {
     fetchDeck()
+    fetchCards()
   },[])
 
   return (
@@ -38,7 +53,7 @@ const Deck = () => {
         }}
       >
         <div className="card-header d-flex justify-content-between align-items-center">
-          <div><span className='fw-bold'>{deck?.deckDTO.deckName}</span></div>
+          <div><span className='fw-bold'>{deck?.deckDTO?.deckName}</span></div>
           <div>
             <button className="custom-font-size btn custom-btn-blue text-white rounded-pill">属性編集</button>
             <button className="custom-font-size btn custom-btn-blue text-white rounded-pill">カード追加</button>
@@ -47,6 +62,18 @@ const Deck = () => {
 
         <div className="card-body d-flex flex-column align-items-center">
           <ul className="w-100 list-group list-group-flush">
+            {cards.map((card) => (
+              card?.isFront==1 && card?.isPrimary==1 ? (
+                <li
+                  className="list-group-item d-flex"
+                  style={{
+                    cursor: 'pointer'
+                  }}
+                >
+                  <div>{card?.attributeValue}</div>
+                </li>
+              ) : null
+            ))}
           </ul>
         </div>
       </div>
