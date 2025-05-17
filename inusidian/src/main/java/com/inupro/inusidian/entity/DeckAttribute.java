@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "deck_attributes")
@@ -29,6 +30,9 @@ public class DeckAttribute {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "deckAttribute")
+    private List<CardValue> cardValues;
 
     @PrePersist
     protected void onCreate() {

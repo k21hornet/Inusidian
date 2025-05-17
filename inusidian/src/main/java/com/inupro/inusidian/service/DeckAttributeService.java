@@ -2,20 +2,20 @@ package com.inupro.inusidian.service;
 
 import com.inupro.inusidian.entity.DeckAttribute;
 import com.inupro.inusidian.entity.dto.DeckAttributeDTO;
+import com.inupro.inusidian.repository.DeckAttributeRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DeckAttributeService {
+    private final DeckAttributeRepository deckAttributeRepository;
 
-    public DeckAttributeDTO createDeckAttributeDTO(DeckAttribute att) {
-        DeckAttributeDTO dto = new DeckAttributeDTO();
-        dto.setId(att.getId());
-        dto.setDeckId(att.getDeck().getId());
-        dto.setAttributeName(att.getAttributeName());
-        dto.setIsFront(att.getIsFront());
-        dto.setIsPrimary(att.getIsPrimary());
-        dto.setCreatedAt(att.getCreatedAt());
-        dto.setUpdatedAt(att.getUpdatedAt());
-        return dto;
+    public DeckAttributeService(DeckAttributeRepository deckAttributeRepository) {
+        this.deckAttributeRepository = deckAttributeRepository;
+    }
+
+    public List<DeckAttributeDTO> findAllByDeckId(int deckId) {
+        return deckAttributeRepository.findAllByDeckId(deckId);
     }
 }

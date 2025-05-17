@@ -17,11 +17,11 @@ public class CardValue {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "deck_attribute_id", nullable = false)
+    @JoinColumn(name = "deck_attribute_id")
     private DeckAttribute deckAttribute;
 
     @ManyToOne
-    @JoinColumn(name = "card_id", nullable = false)
+    @JoinColumn(name = "card_id")
     private Card card;
 
     private String attributeValue;

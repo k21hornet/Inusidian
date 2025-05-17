@@ -53,7 +53,7 @@ const Deck = () => {
         }}
       >
         <div className="card-header d-flex justify-content-between align-items-center">
-          <div><span className='fw-bold'>{deck?.deckDTO?.deckName}</span></div>
+          <div><span className='fw-bold'>{deck?.deckName}</span></div>
           <div>
             <button className="custom-font-size btn custom-btn-blue text-white rounded-pill">属性編集</button>
             <button className="custom-font-size btn custom-btn-blue text-white rounded-pill">カード追加</button>

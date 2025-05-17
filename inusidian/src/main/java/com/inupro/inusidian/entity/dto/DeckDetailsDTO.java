@@ -10,10 +10,20 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeckValueDTO {
+public class DeckDetailsDTO {
 
-    private DeckDTO deckDTO;
+    private Integer id;
+
+    private Integer userId;
+
+    private String deckName;
+
+    private String deckDescription;
 
     private List<DeckAttributeDTO> deckAttributeDTOs;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
 }

@@ -27,7 +27,7 @@ public class Deck {
 
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "deck")
+    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards;
 
     @PrePersist
