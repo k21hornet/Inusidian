@@ -21,3 +21,38 @@ CREATE TABLE IF NOT EXISTS decks (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS deck_attributes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    deck_id INT NOT NULL,
+    attribute_name VARCHAR(255) NOT NULL,
+    is_front INT NOT NULL,
+    is_primary INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS cards (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    deck_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS card_values (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    card_id INT NOT NULL,
+    deck_attribute_id INT NOT NULL,
+    attribute_value VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (card_id) REFERENCES cards(id) ON DELETE CASCADE,
+    FOREIGN KEY (deck_attribute_id) REFERENCES deck_attributes(id) ON DELETE CASCADE
+);
+
+insert into decks(user_id,deck_name,deck_description) values (1,'deck_name','deck_description');
+insert into deck_attributes(deck_id,attribute_name,is_front,is_primary) values(8,'attribute_name1',1,1);
+insert into deck_attributes(deck_id,attribute_name,is_front,is_primary) values(8,'attribute_name2',1,0);
+insert into deck_attributes(deck_id,attribute_name,is_front,is_primary) values(8,'attribute_name3',0,1);
