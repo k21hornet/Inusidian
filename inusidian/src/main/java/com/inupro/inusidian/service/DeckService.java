@@ -3,9 +3,8 @@ package com.inupro.inusidian.service;
 import com.inupro.inusidian.entity.Deck;
 import com.inupro.inusidian.entity.DeckAttribute;
 import com.inupro.inusidian.entity.User;
-import com.inupro.inusidian.entity.dto.DeckAttributeDTO;
 import com.inupro.inusidian.entity.dto.DeckDTO;
-import com.inupro.inusidian.entity.dto.DeckValueDTO;
+import com.inupro.inusidian.entity.dto.DeckDetailsDTO;
 import com.inupro.inusidian.input.DeckInput;
 import com.inupro.inusidian.repository.DeckAttributeRepository;
 import com.inupro.inusidian.repository.DeckRepository;
@@ -13,7 +12,6 @@ import com.inupro.inusidian.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,27 +29,25 @@ public class DeckService {
         this.deckAttributeService = deckAttributeService;
     }
 
-
     public List<DeckDTO> findAllByUserId(int userId) {
-        List<Deck> decks = deckRepository.findAllByUserId(userId);
-
-        List<DeckDTO> deckDTOs = new ArrayList<>();
-        for (Deck deck : decks) {
-            deckDTOs.add(createDeckDTO(deck));
-        }
-        return deckDTOs;
+        return deckRepository.findAllByUserId(userId);
     }
 
-    public DeckValueDTO findById(int id) {
+    public DeckDetailsDTO findById(int id) {
         Optional<Deck> deckOptional = deckRepository.findById(id);
         if (deckOptional.isEmpty()) throw new RuntimeException();
-        Deck deck = deckOptional.get();
 
-        // 循環参照を防ぐために一生懸命DTO作ったが、もっといい方法ないんかな
-        // エンティティにリレーション書かなければ圧倒的に楽になるけど教科書的ではないし
-        DeckValueDTO deckValueDTO = new DeckValueDTO();
-        deckValueDTO.setDeckDTO(createDeckDTO(deck));
-        return deckValueDTO;
+        Deck deck = deckOptional.get();
+        DeckDetailsDTO dto = new DeckDetailsDTO();
+        dto.setId(deck.getId());
+        dto.setUserId(deck.getUserId());
+        dto.setDeckName(deck.getDeckName());
+        dto.setDeckDescription(deck.getDeckDescription());
+        dto.setDeckAttributeDTOs(deckAttributeService.findAllByDeckId(id));
+        dto.setCreatedAt(deck.getCreatedAt());
+        dto.setUpdatedAt(deck.getUpdatedAt());
+
+        return dto;
     }
 
     @Transactional
@@ -80,16 +76,5 @@ public class DeckService {
         backDeckAttribute.setIsFront(0);
         backDeckAttribute.setIsPrimary(1);
         deckAttributeRepository.save(backDeckAttribute);
-    }
-
-    public DeckDTO createDeckDTO(Deck deck) {
-        DeckDTO dto = new DeckDTO();
-        dto.setId(deck.getId());
-        dto.setUserId(deck.getUserId());
-        dto.setDeckName(deck.getDeckName());
-        dto.setDeckDescription(deck.getDeckDescription());
-        dto.setCreatedAt(deck.getCreatedAt());
-        dto.setUpdatedAt(deck.getUpdatedAt());
-        return dto;
     }
 }

@@ -55,10 +55,17 @@ CREATE TABLE IF NOT EXISTS card_values (
 drop table decks, deck_attributes, cards, card_values;
 
 insert into decks(user_id,deck_name,deck_description) values (1,'deck_name','deck_description');
+insert into decks(user_id,deck_name,deck_description) values (1,'deck_name2','deck_description2');
 insert into deck_attributes(deck_id,attribute_name,is_front,is_primary) values(1,'attribute_name1',1,1);
 insert into deck_attributes(deck_id,attribute_name,is_front,is_primary) values(1,'attribute_name2',1,0);
 insert into deck_attributes(deck_id,attribute_name,is_front,is_primary) values(1,'attribute_name3',0,1);
 insert into cards(deck_id) values(1);
+insert into cards(deck_id) values(1);
+insert into cards(deck_id) values(1);
 insert into card_values(card_id,deck_attribute_id,attribute_value) values(1,1,'front card values');
 insert into card_values(card_id,deck_attribute_id,attribute_value) values(1,3,'back card values');
+insert into card_values(card_id,deck_attribute_id,attribute_value) values(2,1,'front card values2');
+insert into card_values(card_id,deck_attribute_id,attribute_value) values(2,3,'back card values2');
+insert into card_values(card_id,deck_attribute_id,attribute_value) values(3,1,'front card values3');
+insert into card_values(card_id,deck_attribute_id,attribute_value) values(3,3,'back card values3');
 
