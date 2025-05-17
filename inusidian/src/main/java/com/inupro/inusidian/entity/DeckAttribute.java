@@ -17,7 +17,7 @@ public class DeckAttribute {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "deck_id")
+    @JoinColumn(name = "deck_id", nullable = false)
     private Deck deck;
 
     private String attributeName;

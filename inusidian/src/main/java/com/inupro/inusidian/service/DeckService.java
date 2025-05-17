@@ -35,16 +35,9 @@ public class DeckService {
 
         List<DeckDTO> deckDTOs = new ArrayList<>();
         for (Deck deck : decks) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(deck.getUser().getId());
-            userDTO.setUsername(deck.getUser().getUsername());
-            userDTO.setEmail(deck.getUser().getEmail());
-            userDTO.setCreatedAt(deck.getUser().getCreatedAt());
-            userDTO.setUpdatedAt(deck.getUser().getUpdatedAt());
-
             DeckDTO deckDTO = new DeckDTO();
             deckDTO.setId(deck.getId());
-            deckDTO.setUser(userDTO);
+            deckDTO.setUserId(deck.getUser().getId());
             deckDTO.setDeckName(deck.getDeckName());
             deckDTO.setDeckDescription(deck.getDeckDescription());
             deckDTO.setCreatedAt(deck.getCreatedAt());
