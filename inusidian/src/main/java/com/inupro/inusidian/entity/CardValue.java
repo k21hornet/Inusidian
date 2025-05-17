@@ -7,22 +7,24 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "card_values")
 @Data
 @NoArgsConstructor
-public class User {
+public class CardValue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "deck_attribute_id", nullable = false)
+    private DeckAttribute deckAttribute;
 
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "card_id", nullable = false)
+    private Card card;
 
-    private String password;
-
-    private String authority;
+    private String attributeValue;
 
     private LocalDateTime createdAt;
 
@@ -38,5 +40,4 @@ public class User {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
 }

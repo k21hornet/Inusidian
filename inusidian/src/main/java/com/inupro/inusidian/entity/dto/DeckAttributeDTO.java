@@ -1,28 +1,25 @@
 package com.inupro.inusidian.entity.dto;
 
-import com.inupro.inusidian.entity.DeckAttribute;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class DeckDTO {
+public class DeckAttributeDTO {
 
     private Integer id;
 
-    private Integer userId;
+    private Integer deckId;
 
-    private String deckName;
+    private String attributeName;
 
-    private String deckDescription;
+    private Integer isFront;
+
+    private Integer isPrimary;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
 }

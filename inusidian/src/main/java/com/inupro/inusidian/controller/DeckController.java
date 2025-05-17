@@ -1,6 +1,7 @@
 package com.inupro.inusidian.controller;
 
 import com.inupro.inusidian.entity.dto.DeckDTO;
+import com.inupro.inusidian.entity.dto.DeckValueDTO;
 import com.inupro.inusidian.input.DeckInput;
 import com.inupro.inusidian.service.DeckService;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,11 @@ public class DeckController {
     @GetMapping("/decks/{userId}")
     public List<DeckDTO> decks(@PathVariable int userId) {
         return deckService.findAllByUserId(userId);
+    }
+
+    @GetMapping("/{id}")
+    public DeckValueDTO getDeck(@PathVariable int id) {
+        return deckService.findById(id);
     }
 
     @PostMapping("/create")
