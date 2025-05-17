@@ -31,21 +31,7 @@ public class DeckService {
 
 
     public List<DeckDTO> findAllByUserId(int userId) {
-        List<Deck> decks = deckRepository.findAllByUserId(userId);
-
-        List<DeckDTO> deckDTOs = new ArrayList<>();
-        for (Deck deck : decks) {
-            DeckDTO deckDTO = new DeckDTO();
-            deckDTO.setId(deck.getId());
-            deckDTO.setUserId(deck.getUser().getId());
-            deckDTO.setDeckName(deck.getDeckName());
-            deckDTO.setDeckDescription(deck.getDeckDescription());
-            deckDTO.setCreatedAt(deck.getCreatedAt());
-            deckDTO.setUpdatedAt(deck.getUpdatedAt());
-
-            deckDTOs.add(deckDTO);
-        }
-        return deckDTOs;
+        return deckRepository.findAllByUserId(userId);
     }
 
     @Transactional
