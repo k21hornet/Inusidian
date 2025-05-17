@@ -2,12 +2,13 @@ package com.inupro.inusidian.controller;
 
 import com.inupro.inusidian.entity.Card;
 import com.inupro.inusidian.entity.dto.CardDTO;
+import com.inupro.inusidian.input.CardInput;
 import com.inupro.inusidian.service.CardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,8 +18,19 @@ import java.util.List;
 public class CardController {
     private final CardService cardService;
 
-    @GetMapping("/cards/{deckId}")
-    public List<CardDTO> cards(@PathVariable int deckId) {
-        return cardService.findAllByDeckId(deckId);
+    @PostMapping("/create")
+    public ResponseEntity<?> createCard(
+            @Validated @RequestBody CardInput cardInput,
+            BindingResult result
+            ) {
+        if (result.hasErrors()) return ResponseEntity.badRequest().body(result.getAllErrors());
+
+        cardService.create(cardInput);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}")
+    public CardDTO getCard(@PathVariable int id) {
+        return cardService.findById(id);
     }
 }

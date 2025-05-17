@@ -1,6 +1,5 @@
 package com.inupro.inusidian.entity.dto;
 
-import com.inupro.inusidian.entity.DeckAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +19,8 @@ public class DeckDTO {
     private String deckName;
 
     private String deckDescription;
+
+    private List<CardDTO> cards;
 
     private LocalDateTime createdAt;
 
