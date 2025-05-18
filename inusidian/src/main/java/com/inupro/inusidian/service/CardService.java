@@ -69,6 +69,10 @@ public class CardService {
         cardRepository.save(card);
     }
 
+    public void deleteCard(int id) {
+        cardRepository.deleteById(id);
+    }
+
 
     public CardDTO createDTO(Card card) {
         CardDTO dto = new CardDTO();

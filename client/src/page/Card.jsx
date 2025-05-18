@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 const Card = () => {
   const [card, setCard] = useState([])
+  const [deckId, setDeckId] = useState()
 
   const [sentence, setSentence] = useState("")
   const [word, setWord] = useState("")
@@ -25,6 +26,7 @@ const Card = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_API}/card/${id}`, { withCredentials: true })
       if(res.status===200) {
+        setDeckId(res.data.deckId)
         setCard(res.data)
         setSentence(res.data.sentence)
         setWord(res.data.word)
@@ -66,6 +68,18 @@ const Card = () => {
 
     } catch (err) {
       console.log(err)
+    }
+  }
+
+  const deleteCard = async() => {
+    const check = window.confirm("Are you sure?")
+    if (!check) return
+
+    try {
+      await axios.delete(`${import.meta.env.VITE_API}/card/delete/${id}`,{ withCredentials: true })
+      navigate(`/deck/${deckId}`)
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -184,7 +198,9 @@ const Card = () => {
                     />
                   </div>
 
-                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">保存する</button>
+                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Save</button>
+
+                  <button onClick={deleteCard} className="mb-3 btn btn-primary custom-btn-blue w-100">Delete this card</button>
 
                 </form>
 

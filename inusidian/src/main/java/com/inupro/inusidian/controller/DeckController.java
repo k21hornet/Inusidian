@@ -50,4 +50,10 @@ public class DeckController {
         deckService.updateDeck(deckInput);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteDeck(@PathVariable int id) {
+        deckService.deleteDeck(id);
+        return ResponseEntity.ok().build();
+    }
 }

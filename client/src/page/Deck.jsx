@@ -61,6 +61,18 @@ const Deck = () => {
     }
   }
 
+  const deleteDeck = async() => {
+    const check = window.confirm("Are you sure?")
+    if (!check) return
+
+    try {
+      await axios.delete(`${import.meta.env.VITE_API}/deck/delete/${id}`,{ withCredentials: true })
+      navigate("/")
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   // 新規カード作成
   const [sentence, setSentence] = useState("")
   const [word, setWord] = useState("")
@@ -278,7 +290,9 @@ const Deck = () => {
                     />
                   </div>
 
-                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">保存する</button>
+                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Save</button>
+
+                  <button onClick={deleteDeck} className="mb-3 btn btn-primary custom-btn-blue w-100">Delete this deck</button>
 
                 </form>
 

@@ -44,4 +44,10 @@ public class CardController {
         cardService.update(cardInput);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCard(@PathVariable int id) {
+        cardService.deleteCard(id);
+        return ResponseEntity.ok().build();
+    }
 }

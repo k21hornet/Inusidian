@@ -58,6 +58,10 @@ public class DeckService {
         deckRepository.save(deck);
     }
 
+    public void deleteDeck(int id) {
+        deckRepository.deleteById(id);
+    }
+
 
     public DeckDTO createDTO(Deck deck) {
         DeckDTO dto = new DeckDTO();
