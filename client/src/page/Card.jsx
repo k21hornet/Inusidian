@@ -111,11 +111,26 @@ const Card = () => {
 
         <div className="card-body d-flex flex-column align-items-center">
           <ul className="w-100 list-group list-group-flush">
-            <li className="list-group-item row d-flex fs-3">{card?.sentence}</li>
-            <li className="list-group-item row d-flex fs-3">{card?.word}</li>
-            <li className="list-group-item row d-flex fs-3">{card?.pronounce}</li>
-            <li className="list-group-item row d-flex fs-3">{card?.meaning}</li>
-            <li className="list-group-item row d-flex fs-3">{card?.translate}</li>
+            <li className="list-group-item row d-flex fs-3">
+              <div className='col-2'>Sentence</div>
+              <div className='col-10'>{card?.sentence}</div>
+            </li>
+            <li className="list-group-item row d-flex fs-3">
+              <div className='col-2'>Word</div>
+              <div className='col-10'>{card?.word}</div>
+            </li>
+            <li className="list-group-item row d-flex fs-3">
+              <div className='col-2'>Pronounce</div>
+              <div className='col-10'>{card?.pronounce}</div>
+            </li>
+            <li className="list-group-item row d-flex fs-3">
+              <div className='col-2'>Meaning</div>
+              <div className='col-10'>{card?.meaning}</div>
+            </li>
+            <li className="list-group-item row d-flex fs-3">
+              <div className='col-2'>Translate</div>
+              <div className='col-10'>{card?.translate}</div>
+            </li>
           </ul>
         </div>
 
