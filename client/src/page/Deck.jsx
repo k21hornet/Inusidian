@@ -6,10 +6,15 @@ import { useNavigate, useParams } from 'react-router-dom'
 const Deck = () => {
   const [deck, setDeck] = useState()
   const [cards, setCards] = useState([])
+  const [deckName, setDeckName] = useState("")
+  const [deckDescription, setDeckDescription] = useState("")
 
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
+  const [showModal2, setShowModal2] = useState(false)
+  const openModal2 = () => setShowModal2(true)
+  const closeModal2 = () => setShowModal2(false)
 
   const { id } = useParams()
   const navigate = useNavigate()
@@ -21,10 +26,38 @@ const Deck = () => {
         `${import.meta.env.VITE_API}/deck/${id}`, { withCredentials: true })
       if(res.status===200) {
         setDeck(res.data)
+        setDeckName(res.data.deckName)
+        setDeckDescription(res.data.deckDescription)
         setCards(res.data.cards)
       }
     } catch (e) {
       console.log(e)
+    }
+  }
+
+  // デッキ情報編集
+  const editDeck = async (e) => {
+    e.preventDefault()
+    const deck = {
+      id,
+      deckName,
+      deckDescription
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API}/deck/update`, 
+        deck,
+        { withCredentials: true })
+      if (res.status===200) {
+        setDeckName("")
+        setDeckDescription("")
+        closeModal2()
+        fetchDeck()
+      }
+
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -86,7 +119,7 @@ const Deck = () => {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div><span className='fw-bold'>{deck?.deckName}</span></div>
           <div>
-            <button className="custom-font-size btn custom-btn-blue text-white rounded-pill">属性編集</button>
+            <button onClick={openModal2} className="custom-font-size btn custom-btn-blue text-white rounded-pill">デッキ編集</button>
             <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">カード追加</button>
           </div>
         </div>
@@ -195,6 +228,62 @@ const Deck = () => {
 
                 <div className='text-end'>
                   <span onClick={closeModal} style={{color: '#615fff'}}>閉じる</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showModal2 && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+          onClick={closeModal2}
+        >
+          <div 
+            className="modal-dialog modal-dialog-centered"
+            onClick={(e) => e.stopPropagation()} // モーダル本体のクリックは無視
+          >
+            <div className="modal-content">
+              <div className="modal-body">
+                <h3 className='text-center'>Edit Deck</h3>
+
+                <form onSubmit={editDeck}>
+                  <div className="mb-3">
+                    <label className="form-label small">デッキ名</label>
+                    <input
+                      type="text"
+                      name="deckName"
+                      value={deckName}
+                      onChange={(e) => setDeckName(e.target.value)}
+                      required
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label small">説明文</label>
+                    <textarea
+                      type="text"
+                      name="deckDescription"
+                      value={deckDescription}
+                      onChange={(e) => setDeckDescription(e.target.value)}
+                      required
+                      className="form-control"
+                    />
+                  </div>
+
+                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">保存する</button>
+
+                </form>
+
+                <div className='text-end'>
+                  <span onClick={closeModal2} style={{color: '#615fff'}}>閉じる</span>
                 </div>
 
               </div>

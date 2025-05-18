@@ -55,6 +55,21 @@ public class CardService {
         cardRepository.save(card);
     }
 
+    public void update(CardInput input) {
+        Optional<Card> cardOptional = cardRepository.findById(input.getId());
+        if (cardOptional.isEmpty()) throw new RuntimeException();
+
+        Card card = cardOptional.get();
+        card.setSentence(input.getSentence());
+        card.setWord(input.getWord());
+        card.setPronounce(input.getPronounce());
+        card.setMeaning(input.getMeaning());
+        card.setTranslate(input.getTranslate());
+
+        cardRepository.save(card);
+    }
+
+
     public CardDTO createDTO(Card card) {
         CardDTO dto = new CardDTO();
         dto.setId(card.getId());

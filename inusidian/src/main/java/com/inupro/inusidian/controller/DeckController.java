@@ -39,4 +39,15 @@ public class DeckController {
         deckService.createDeck(deckInput);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateDeck(
+            @Validated @RequestBody DeckInput deckInput,
+            BindingResult result
+    ) {
+        if (result.hasErrors()) return ResponseEntity.badRequest().body(result.getAllErrors());
+
+        deckService.updateDeck(deckInput);
+        return ResponseEntity.ok().build();
+    }
 }

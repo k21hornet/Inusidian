@@ -48,6 +48,17 @@ public class DeckService {
         deckRepository.save(deck);
     }
 
+    public void updateDeck(DeckInput deckInput) {
+        Optional<Deck> deckOptional = deckRepository.findById(deckInput.getId());
+        if (deckOptional.isEmpty()) throw new RuntimeException();
+
+        Deck deck = deckOptional.get();
+        deck.setDeckName(deckInput.getDeckName());
+        deck.setDeckDescription(deckInput.getDeckDescription());
+        deckRepository.save(deck);
+    }
+
+
     public DeckDTO createDTO(Deck deck) {
         DeckDTO dto = new DeckDTO();
         dto.setId(deck.getId());

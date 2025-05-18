@@ -6,8 +6,18 @@ import { useNavigate, useParams } from 'react-router-dom'
 const Card = () => {
   const [card, setCard] = useState([])
 
+  const [sentence, setSentence] = useState("")
+  const [word, setWord] = useState("")
+  const [pronounce, setPronounce] = useState("")
+  const [meaning, setMeaning] = useState("")
+  const [translate, setTranslate] = useState("")
+
   const { id } = useParams()
   const navigate = useNavigate()
+
+  const [showModal, setShowModal] = useState(false)
+  const openModal = () => setShowModal(true)
+  const closeModal = () => setShowModal(false)
 
   // カードを取得
   const fetchCard = async () => {
@@ -16,9 +26,46 @@ const Card = () => {
         `${import.meta.env.VITE_API}/card/${id}`, { withCredentials: true })
       if(res.status===200) {
         setCard(res.data)
+        setSentence(res.data.sentence)
+        setWord(res.data.word)
+        setPronounce(res.data.pronounce)
+        setMeaning(res.data.meaning)
+        setTranslate(res.data.translate)
       }
     } catch (e) {
       console.log(e)
+    }
+  }
+
+  // カード情報編集
+  const editCard = async (e) => {
+    e.preventDefault()
+    const card = {
+      id,
+      sentence,
+      word,
+      pronounce,
+      meaning,
+      translate
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API}/card/update`, 
+        card,
+        { withCredentials: true })
+      if (res.status===200) {
+        setSentence("")
+        setWord("")
+        setPronounce("")
+        setMeaning("")
+        setTranslate("")
+        closeModal()
+        fetchCard()
+      }
+
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -44,7 +91,7 @@ const Card = () => {
           <div><span className='fw-bold'>カード詳細</span></div>
           <div>
             <button onClick={() => navigate(`/deck/${card.deckId}`)} className="custom-font-size btn custom-btn-blue text-white rounded-pill">戻る</button>
-            <button className="custom-font-size btn custom-btn-blue text-white rounded-pill">編集</button>
+            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">編集</button>
           </div>
         </div>
 
@@ -61,6 +108,96 @@ const Card = () => {
       </div>
       
       </div>
+
+      {showModal && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+          onClick={closeModal}
+        >
+          <div 
+            className="modal-dialog modal-dialog-centered"
+            onClick={(e) => e.stopPropagation()} // モーダル本体のクリックは無視
+          >
+            <div className="modal-content">
+              <div className="modal-body">
+                <h3 className='text-center'>Create new card</h3>
+
+                <form onSubmit={editCard}>
+                  <div className="mb-3">
+                    <label className="form-label small">Sentence</label>
+                    <input
+                      type="text"
+                      name="sentence"
+                      value={sentence}
+                      onChange={(e) => setSentence(e.target.value)}
+                      required
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label small">Word</label>
+                    <input
+                      type="text"
+                      name="word"
+                      value={word}
+                      onChange={(e) => setWord(e.target.value)}
+                      required
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label small">Pronounce</label>
+                    <input
+                      type="text"
+                      name="pronounce"
+                      value={pronounce}
+                      onChange={(e) => setPronounce(e.target.value)}
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label small">Meaning</label>
+                    <input
+                      type="text"
+                      name="meaning"
+                      value={meaning}
+                      onChange={(e) => setMeaning(e.target.value)}
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label small">Translate</label>
+                    <input
+                      type="text"
+                      name="translate"
+                      value={translate}
+                      onChange={(e) => setTranslate(e.target.value)}
+                      className="form-control"
+                    />
+                  </div>
+
+                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">保存する</button>
+
+                </form>
+
+                <div className='text-end'>
+                  <span onClick={closeModal} style={{color: '#615fff'}}>閉じる</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

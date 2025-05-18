@@ -33,4 +33,15 @@ public class CardController {
     public CardDTO getCard(@PathVariable int id) {
         return cardService.findById(id);
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateCard(
+            @Validated @RequestBody CardInput cardInput,
+            BindingResult result
+    ) {
+        if (result.hasErrors()) return ResponseEntity.badRequest().body(result.getAllErrors());
+
+        cardService.update(cardInput);
+        return ResponseEntity.ok().build();
+    }
 }

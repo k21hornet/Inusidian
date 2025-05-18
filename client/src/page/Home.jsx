@@ -82,7 +82,6 @@ const Home = () => {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div>デッキ一覧</div>
           <div>
-            <button className="custom-font-size btn custom-btn-blue text-white rounded-pill">デッキ編集</button>
             <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">デッキ追加</button>
           </div>
         </div>
