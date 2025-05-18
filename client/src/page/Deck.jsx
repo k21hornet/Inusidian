@@ -131,8 +131,8 @@ const Deck = () => {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div><span className='fw-bold'>{deck?.deckName}</span></div>
           <div>
-            <button onClick={openModal2} className="custom-font-size btn custom-btn-blue text-white rounded-pill">デッキ編集</button>
-            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">カード追加</button>
+            <button onClick={openModal2} className="custom-font-size btn custom-btn-blue text-white rounded-pill">Edit deck</button>
+            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">Add card</button>
           </div>
         </div>
 
@@ -234,12 +234,12 @@ const Deck = () => {
                     />
                   </div>
 
-                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">保存する</button>
+                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Save</button>
 
                 </form>
 
                 <div className='text-end'>
-                  <span onClick={closeModal} style={{color: '#615fff'}}>閉じる</span>
+                  <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
                 </div>
 
               </div>
@@ -267,7 +267,7 @@ const Deck = () => {
 
                 <form onSubmit={editDeck}>
                   <div className="mb-3">
-                    <label className="form-label small">デッキ名</label>
+                    <label className="form-label small">Deck Name</label>
                     <input
                       type="text"
                       name="deckName"
@@ -279,7 +279,7 @@ const Deck = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label className="form-label small">説明文</label>
+                    <label className="form-label small">Description</label>
                     <textarea
                       type="text"
                       name="deckDescription"
@@ -297,7 +297,7 @@ const Deck = () => {
                 </form>
 
                 <div className='text-end'>
-                  <span onClick={closeModal2} style={{color: '#615fff'}}>閉じる</span>
+                  <span onClick={closeModal2} style={{color: '#615fff'}}>Close</span>
                 </div>
 
               </div>

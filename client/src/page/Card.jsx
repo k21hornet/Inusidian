@@ -102,10 +102,10 @@ const Card = () => {
       >
 
         <div className="card-header d-flex justify-content-between align-items-center">
-          <div><span className='fw-bold'>カード詳細</span></div>
+          <div><span className='fw-bold'>Card Details</span></div>
           <div>
-            <button onClick={() => navigate(`/deck/${card.deckId}`)} className="custom-font-size btn custom-btn-blue text-white rounded-pill">戻る</button>
-            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">編集</button>
+            <button onClick={() => navigate(`/deck/${card.deckId}`)} className="custom-font-size btn custom-btn-blue text-white rounded-pill">Back</button>
+            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">Edit</button>
           </div>
         </div>
 
@@ -138,7 +138,7 @@ const Card = () => {
           >
             <div className="modal-content">
               <div className="modal-body">
-                <h3 className='text-center'>Create new card</h3>
+                <h3 className='text-center'>Edit card</h3>
 
                 <form onSubmit={editCard}>
                   <div className="mb-3">
@@ -205,7 +205,7 @@ const Card = () => {
                 </form>
 
                 <div className='text-end'>
-                  <span onClick={closeModal} style={{color: '#615fff'}}>閉じる</span>
+                  <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
                 </div>
 
               </div>

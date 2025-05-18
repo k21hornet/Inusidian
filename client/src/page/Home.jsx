@@ -80,9 +80,9 @@ const Home = () => {
         }}
       >
         <div className="card-header d-flex justify-content-between align-items-center">
-          <div>デッキ一覧</div>
+          <div>Your all decks</div>
           <div>
-            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">デッキ追加</button>
+            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">Add deck</button>
           </div>
         </div>
 
@@ -90,18 +90,27 @@ const Home = () => {
         <ul className="w-100 list-group list-group-flush">
         {decks.map((deck) => (
           <li 
-            className="list-group-item d-flex justify-content-between"
+            className="list-group-item d-flex justify-content-between align-items-center"
             style={{
               cursor: 'pointer'
             }}
             onClick={() => navigateToDeck(deck.id)}
           >
-            <div>
-              <div>{deck?.deckName}</div>
-              <div>{deck?.deckDescription}</div>
+            <div className='d-flex align-items-center'>
+              <div
+                className="d-flex justify-content-center align-items-center rounded-circle text-white"
+                style={{width: '40px', height: '40px', marginRight: '16px' , backgroundColor: '#aaa'}}
+              >
+              </div>
+
+              <div>
+                <div className='fw-bold'>{deck?.deckName}</div>
+                <div className="fst-italic">{deck?.deckDescription}</div>
+              </div>
             </div>
+
             <div>
-              100単語
+              100 words
             </div>
           </li>
         ))}
@@ -124,11 +133,11 @@ const Home = () => {
           >
             <div className="modal-content">
               <div className="modal-body">
-                <h3 className='text-center'>デッキ新規作成</h3>
+                <h3 className='text-center'>Add new deck</h3>
 
                 <form onSubmit={createDeck}>
                   <div className="mb-3">
-                    <label className="form-label small">デッキ名</label>
+                    <label className="form-label small">Deck Name</label>
                     <input
                       type="text"
                       name="deckName"
@@ -140,7 +149,7 @@ const Home = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label className="form-label small">説明文</label>
+                    <label className="form-label small">Description</label>
                     <textarea
                       type="text"
                       name="deckDescription"
@@ -151,12 +160,12 @@ const Home = () => {
                     />
                   </div>
 
-                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">保存する</button>
+                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Save</button>
 
                 </form>
 
                 <div className='text-end'>
-                  <span onClick={closeModal} style={{color: '#615fff'}}>閉じる</span>
+                  <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
                 </div>
 
               </div>
