@@ -6,7 +6,7 @@ const Header = () => {
   const navigate = useNavigate()
 
   const logout = async () => {
-    const check = window.confirm("ログアウトしますか？")
+    const check = window.confirm("Are you sure you want to log out?")
     if (!check) return
 
     try {
@@ -24,13 +24,14 @@ const Header = () => {
       </div>
 
       <div className="ms-auto d-flex align-items-center gap-3">
-        <Link to="/user" className="nav-link custom-nav-link">ユーザー情報</Link>
-        <Link to="/" className="nav-link custom-nav-link">デッキ一覧</Link>
+        <Link to="/#" className="nav-link custom-nav-link">Help</Link>
+        <Link to="/user" className="nav-link custom-nav-link">User Info</Link>
+        <Link to="/" className="nav-link custom-nav-link">All Decks</Link>
         <button
           className="btn custom-btn-blue text-white rounded-pill"
           onClick={logout}
          >
-          ログアウト</button>
+          Logout</button>
       </div>
     </nav>
   )
