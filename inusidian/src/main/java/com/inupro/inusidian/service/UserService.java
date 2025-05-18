@@ -2,11 +2,11 @@ package com.inupro.inusidian.service;
 
 import com.inupro.inusidian.entity.User;
 import com.inupro.inusidian.input.NewUserInput;
+import com.inupro.inusidian.input.UserUpdateInput;
 import com.inupro.inusidian.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -39,6 +39,17 @@ public class UserService {
         user.setEmail(userInput.getEmail());
         user.setPassword(passwordEncoder.encode(userInput.getPassword()));
         user.setAuthority("USER");
+
+        userRepository.save(user);
+    }
+
+    public void update(UserUpdateInput input) {
+        Optional<User> userOptional = userRepository.findById(input.getId());
+        if (userOptional.isEmpty()) throw new RuntimeException();
+
+        User user = userOptional.get();
+        user.setUsername(input.getUsername());
+        user.setEmail(input.getEmail());
 
         userRepository.save(user);
     }

@@ -1,7 +1,6 @@
 package com.inupro.inusidian.controller;
 
 import com.inupro.inusidian.entity.dto.DeckDTO;
-import com.inupro.inusidian.entity.dto.DeckDetailsDTO;
 import com.inupro.inusidian.input.DeckInput;
 import com.inupro.inusidian.service.DeckService;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class DeckController {
     }
 
     @GetMapping("/{id}")
-    public DeckDetailsDTO getDeck(@PathVariable int id) {
+    public DeckDTO getDeck(@PathVariable int id) {
         return deckService.findById(id);
     }
 
@@ -38,6 +37,23 @@ public class DeckController {
         if (result.hasErrors()) return ResponseEntity.badRequest().body(result.getAllErrors());
 
         deckService.createDeck(deckInput);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateDeck(
+            @Validated @RequestBody DeckInput deckInput,
+            BindingResult result
+    ) {
+        if (result.hasErrors()) return ResponseEntity.badRequest().body(result.getAllErrors());
+
+        deckService.updateDeck(deckInput);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteDeck(@PathVariable int id) {
+        deckService.deleteDeck(id);
         return ResponseEntity.ok().build();
     }
 }

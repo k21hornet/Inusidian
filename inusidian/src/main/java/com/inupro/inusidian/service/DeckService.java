@@ -1,80 +1,78 @@
 package com.inupro.inusidian.service;
 
 import com.inupro.inusidian.entity.Deck;
-import com.inupro.inusidian.entity.DeckAttribute;
 import com.inupro.inusidian.entity.User;
 import com.inupro.inusidian.entity.dto.DeckDTO;
-import com.inupro.inusidian.entity.dto.DeckDetailsDTO;
 import com.inupro.inusidian.input.DeckInput;
-import com.inupro.inusidian.repository.DeckAttributeRepository;
 import com.inupro.inusidian.repository.DeckRepository;
 import com.inupro.inusidian.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DeckService {
+    private final CardService cardService;
     private final DeckRepository deckRepository;
-    private final DeckAttributeRepository deckAttributeRepository;
     private final UserRepository userRepository;
-    private final DeckAttributeService deckAttributeService;
-
-    public DeckService(DeckRepository deckRepository, DeckAttributeRepository deckAttributeRepository, UserRepository userRepository, DeckAttributeService deckAttributeService) {
-        this.deckRepository = deckRepository;
-        this.deckAttributeRepository = deckAttributeRepository;
-        this.userRepository = userRepository;
-        this.deckAttributeService = deckAttributeService;
-    }
 
     public List<DeckDTO> findAllByUserId(int userId) {
-        return deckRepository.findAllByUserId(userId);
+        List<Deck> decks = deckRepository.findAllByUserId(userId);
+
+        List<DeckDTO> DTOs = new ArrayList<>();
+        for (Deck deck : decks) {
+            DTOs.add(createDTO(deck));
+        }
+        return DTOs;
     }
 
-    public DeckDetailsDTO findById(int id) {
+    public DeckDTO findById(int id) {
         Optional<Deck> deckOptional = deckRepository.findById(id);
         if (deckOptional.isEmpty()) throw new RuntimeException();
 
-        Deck deck = deckOptional.get();
-        DeckDetailsDTO dto = new DeckDetailsDTO();
-        dto.setId(deck.getId());
-        dto.setUserId(deck.getUserId());
-        dto.setDeckName(deck.getDeckName());
-        dto.setDeckDescription(deck.getDeckDescription());
-        dto.setDeckAttributeDTOs(deckAttributeService.findAllByDeckId(id));
-        dto.setCreatedAt(deck.getCreatedAt());
-        dto.setUpdatedAt(deck.getUpdatedAt());
-
-        return dto;
+        return createDTO(deckOptional.get());
     }
 
-    @Transactional
     public void createDeck(DeckInput deckInput) {
         Optional<User> userOptional = userRepository.findById(deckInput.getUserId());
         if (userOptional.isEmpty()) throw new RuntimeException();
 
-        // デッキ新規作成
         Deck deck = new Deck();
         deck.setUserId(userOptional.get().getId());
         deck.setDeckName(deckInput.getDeckName());
         deck.setDeckDescription(deckInput.getDeckDescription());
-        deck = deckRepository.save(deck);
+        deckRepository.save(deck);
+    }
 
-        // デッキのデフォルト属性を作成
-        DeckAttribute frontDeckAttribute = new DeckAttribute();
-        frontDeckAttribute.setDeck(deck);
-        frontDeckAttribute.setAttributeName("Front");
-        frontDeckAttribute.setIsFront(1);
-        frontDeckAttribute.setIsPrimary(1);
-        deckAttributeRepository.save(frontDeckAttribute);
+    public void updateDeck(DeckInput deckInput) {
+        Optional<Deck> deckOptional = deckRepository.findById(deckInput.getId());
+        if (deckOptional.isEmpty()) throw new RuntimeException();
 
-        DeckAttribute backDeckAttribute = new DeckAttribute();
-        backDeckAttribute.setDeck(deck);
-        backDeckAttribute.setAttributeName("Back");
-        backDeckAttribute.setIsFront(0);
-        backDeckAttribute.setIsPrimary(1);
-        deckAttributeRepository.save(backDeckAttribute);
+        Deck deck = deckOptional.get();
+        deck.setDeckName(deckInput.getDeckName());
+        deck.setDeckDescription(deckInput.getDeckDescription());
+        deckRepository.save(deck);
+    }
+
+    public void deleteDeck(int id) {
+        deckRepository.deleteById(id);
+    }
+
+
+    public DeckDTO createDTO(Deck deck) {
+        DeckDTO dto = new DeckDTO();
+        dto.setId(deck.getId());
+        dto.setUserId(deck.getUserId());
+        dto.setDeckName(deck.getDeckName());
+        dto.setDeckDescription(deck.getDeckDescription());
+        dto.setCards(cardService.findAllByDeckId(deck.getId()));
+        dto.setCreatedAt(deck.getCreatedAt());
+        dto.setUpdatedAt(deck.getUpdatedAt());
+
+        return dto;
     }
 }

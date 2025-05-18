@@ -1,20 +1,22 @@
-package com.inupro.inusidian.entity.dto;
+package com.inupro.inusidian.input;
 
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-public class CardDTO {
+public class CardInput {
 
     private Integer id;
 
     private Integer deckId;
 
+    @NotBlank
     private String sentence;
 
+    @NotBlank
     private String word;
 
     private String pronounce;
