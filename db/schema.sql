@@ -57,5 +57,7 @@ insert into review_intervals(card_id,success_count,next_review_date)
 values(1,0,'2025-05-18');
 insert into review_intervals(card_id,success_count,next_review_date)
 values(2,0,'2025-05-18');
+insert into review_intervals(card_id,success_count,next_review_date)
+values(3,0,'2025-05-18');
 
 drop table review_intervals,cards, decks;

@@ -4,40 +4,33 @@ import axios from 'axios'
 import { useParams } from 'react-router-dom'
 
 const Due = () => {
-  const [dueCards, setDueCards] = useState([])
   const [dueCard, setDueCard] = useState()
-  const [index, setIndex] = useState()
 
   const { id } = useParams()
+  const [showModal, setShowModal] = useState(true)
+  const closeModal = () => setShowModal(false)
 
-  // 今日の単語リストを取得
+  // 今日の単語リストを取得し、ランダムで一問出題する
   const fetchDue = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API}/review/due/${id}`, { withCredentials: true })
-      setDueCards(res.data)
+
+      if (res.data.length > 0) {
+        const randomNum = Math.floor(Math.random() * res.data.length)
+        setDueCard(res.data[randomNum])
+      } else {
+        setDueCard(null)
+      }
     } catch (e) {
       console.log(e)
     }
-  }
-
-  // 問題をランダムに選択
-  const pickupCard = () => {
-    if(dueCards.length == 0) return
-
-    const randomNum = Math.floor(Math.random() * dueCards.length)
-    const item = dueCards[randomNum]
-    
-    setIndex(randomNum)
-    setDueCard(item.card)
   }
 
   // 問題正解時
   const success = async () => {
     try {
       await axios.post(`${import.meta.env.VITE_API}/review/${dueCard.id}/success`, null, {withCredentials: true})
-      setDueCards(dueCards.splice(index,1))
-      setDueCard(null)
-      pickupCard()
+      await fetchDue()
     } catch (e) {
       console.log(e)      
     }
@@ -47,6 +40,7 @@ const Due = () => {
   const failure = async () => {
     try {
       await axios.post(`${import.meta.env.VITE_API}/review/${dueCard.id}/failure`, null, {withCredentials: true})
+      await fetchDue()
     } catch (e) {
       console.log(e)      
     }
@@ -69,23 +63,57 @@ const Due = () => {
         }}
       >
         <div className="card-header d-flex justify-content-between align-items-center">
-          <div onClick={pickupCard}><span className='fw-bold'>Study now</span></div>
+          <div><span className='fw-bold'>Study now</span></div>
         </div>
 
         <div className='w-100 h-100 d-flex flex-column align-items-center fs-4'>
-          <p>{dueCard?.sentence}</p>
-          <p>{dueCard?.word}</p>
-          <hr />
-          <p>{dueCard?.pronounce}</p>
-          <p>{dueCard?.meaning}</p>
-          <p>{dueCard?.translate}</p>
+          {dueCard? (
+            <>
+              <p>{dueCard?.card?.sentence}</p>
+              <p>{dueCard?.card?.word}</p>
+              <hr />
+              <p>{dueCard?.card?.pronounce}</p>
+              <p>{dueCard?.card?.meaning}</p>
+              <p>{dueCard?.card?.translate}</p>
 
-          <div className='d-flex'>
-            <button onClick={failure} className="m-3 btn btn-primary custom-btn-blue w-100">Hard</button>
-            <button onClick={success} className="m-3 btn btn-primary custom-btn-blue w-100">Easy</button>
-          </div>
+              <div className='d-flex'>
+                <button onClick={failure} className="m-3 btn btn-primary custom-btn-blue w-100">Hard</button>
+                <button onClick={success} className="m-3 btn btn-primary custom-btn-blue w-100">Easy</button>
+              </div>
+            </>
+          ) : (
+            <div className='text-center'>
+              <h2 className='fw-bold text-success'>Congratulations!</h2>
+              <p>You have finished this deck for now.</p>
+            </div>
+          )}
         </div>
       </div>
+
+      {showModal && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+          onClick={closeModal}
+        >
+          <div 
+            className="modal-dialog modal-dialog-centered"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-content">
+              <div className="modal-body">
+                <h3 className='text-center'>Are you ready?</h3>
+                <button onClick={closeModal} type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Start</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }
