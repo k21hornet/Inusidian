@@ -54,6 +54,8 @@ values(1,'sentence2','word2','pronounce2','meaning2','translate2');
 insert into cards(deck_id,sentence,word,pronounce,meaning,translate)
 values(1,'sentence3','word3','pronounce3','meaning3','translate3');
 insert into review_intervals(card_id,success_count,next_review_date)
-values(1,3,'2025-05-18');
+values(1,0,'2025-05-18');
+insert into review_intervals(card_id,success_count,next_review_date)
+values(2,0,'2025-05-18');
 
 drop table review_intervals,cards, decks;

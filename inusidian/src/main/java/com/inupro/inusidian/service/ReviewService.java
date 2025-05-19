@@ -6,7 +6,7 @@ import com.inupro.inusidian.repository.ReviewIntervalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class ReviewService {
     private final CardService cardService;
 
     public List<ReviewIntervalDTO> findDueCards(int deckId) {
-        List<ReviewInterval> reviewIntervals = reviewIntervalRepository.findDueCards(deckId, LocalDateTime.now());
+        List<ReviewInterval> reviewIntervals = reviewIntervalRepository.findDueCards(deckId, LocalDate.now());
 
         List<ReviewIntervalDTO> DTOs = new ArrayList<>();
         for (ReviewInterval interval : reviewIntervals) {
@@ -34,9 +34,9 @@ public class ReviewService {
     public void success(int id) {
         ReviewInterval reviewInterval = reviewIntervalRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
-        int count = reviewInterval.getSuccessCount();
+        int count = reviewInterval.getSuccessCount() + 1;
         reviewInterval.setNextReviewDate(calcNextReviewDate(count));
-        reviewInterval.setSuccessCount(count+1);
+        reviewInterval.setSuccessCount(count);
 
         reviewIntervalRepository.save(reviewInterval);
     }
@@ -49,7 +49,7 @@ public class ReviewService {
         ReviewInterval reviewInterval = reviewIntervalRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
         reviewInterval.setSuccessCount(0);
-        reviewInterval.setNextReviewDate(LocalDateTime.now());
+        reviewInterval.setNextReviewDate(LocalDate.now());
 
         reviewIntervalRepository.save(reviewInterval);
     }
@@ -70,17 +70,16 @@ public class ReviewService {
      * @param count
      * @return
      */
-    private LocalDateTime calcNextReviewDate(int count) {
+    private LocalDate calcNextReviewDate(int count) {
         switch (count) {
-            case 0: return LocalDateTime.now();
-            case 1: return LocalDateTime.now().plusDays(1);
-            case 2: return LocalDateTime.now().plusDays(3);
-            case 3: return LocalDateTime.now().plusDays(6);
-            case 4: return LocalDateTime.now().plusDays(10);
-            case 5: return LocalDateTime.now().plusDays(15);
-            case 6: return LocalDateTime.now().plusDays(21);
-            case 7: return LocalDateTime.now().plusDays(28);
-            default: return LocalDateTime.now().plusDays(36);
+            case 1: return LocalDate.now().plusDays(1);
+            case 2: return LocalDate.now().plusDays(3);
+            case 3: return LocalDate.now().plusDays(6);
+            case 4: return LocalDate.now().plusDays(10);
+            case 5: return LocalDate.now().plusDays(15);
+            case 6: return LocalDate.now().plusDays(21);
+            case 7: return LocalDate.now().plusDays(28);
+            default: return LocalDate.now().plusDays(36);
         }
     }
 }

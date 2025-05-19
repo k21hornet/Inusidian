@@ -25,7 +25,7 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{historyId}/failure")
+    @PostMapping("/{id}/failure")
     public ResponseEntity<?> reviewFailure(@PathVariable int id) {
         reviewService.failure(id);
         return ResponseEntity.ok().build();

@@ -3,6 +3,7 @@ package com.inupro.inusidian.entity.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,7 +16,7 @@ public class ReviewIntervalDTO {
 
     private Integer successCount;
 
-    private LocalDateTime nextReviewDate;
+    private LocalDate nextReviewDate;
 
     private LocalDateTime createdAt;
 
