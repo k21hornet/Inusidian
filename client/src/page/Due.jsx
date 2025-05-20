@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const Due = () => {
   const [dueCard, setDueCard] = useState()
 
   const { id } = useParams()
+  const navigate = useNavigate()
   const [showModal, setShowModal] = useState(true)
   const closeModal = () => setShowModal(false)
 
@@ -85,28 +86,31 @@ const Due = () => {
             <div className='text-center'>
               <h2 className='fw-bold text-success'>Congratulations!</h2>
               <p>You have finished this deck for now.</p>
+              <Link to={`/deck/${id}`}>Back to deck</Link>
             </div>
           )}
         </div>
       </div>
 
-      {showModal && (
+      {showModal && dueCard && (
         <div
           className="modal fade show d-block"
           tabIndex="-1"
           style={{
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
           }}
-          onClick={closeModal}
         >
           <div 
             className="modal-dialog modal-dialog-centered"
-            onClick={(e) => e.stopPropagation()}
           >
             <div className="modal-content">
               <div className="modal-body">
                 <h3 className='text-center'>Are you ready?</h3>
-                <button onClick={closeModal} type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Start</button>
+                <br />
+                <div>
+                  <button onClick={() => navigate("/")} type="submit" className="mb-3 btn btn-primary custom-btn-blue w-50">Back</button>
+                  <button onClick={closeModal} type="submit" className="mb-3 btn btn-primary custom-btn-blue w-50">Start</button>
+                </div>
               </div>
             </div>
 
