@@ -29,12 +29,12 @@ const Login = () => {
 
   return (
     <div className="container mt-5" style={{ maxWidth: '400px', fontFamily: "'Poppins', sans-serif" }}>
-      <h2 className="mb-4 text-center">ログイン</h2>
+      <h2 className="mb-4 text-center">Sign In</h2>
 
       <div>
         <form onSubmit={login}>
           <div className="mb-3">
-            <label className="form-label small">メールアドレス</label>
+            <label className="form-label small">Email</label>
             <input
               type="email"
               name="email"
@@ -46,7 +46,7 @@ const Login = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label small">パスワード</label>
+            <label className="form-label small">Password</label>
             <input
               type="password"
               name="password"
@@ -56,10 +56,10 @@ const Login = () => {
               className="form-control"
             />
           </div>
-          <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">ログイン</button>
+          <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Sign In</button>
         </form>
 
-        <Link to={"/register"} className='custom-a-link'>アカウントをお持ちでない方はこちら</Link>
+        <Link to={"/register"} className='custom-a-link'>If you don't have any account, click here.</Link>
       </div>
     </div>
   )

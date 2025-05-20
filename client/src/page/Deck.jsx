@@ -139,8 +139,9 @@ const Deck = () => {
         <div className="card-body d-flex flex-column align-items-center">
           <ul className="w-100 list-group list-group-flush">
             <li className="list-group-item row d-flex">
-              <div className='col-8 fw-bold'>Sentence</div>
-              <div className='col-4 fw-bold'>Word</div>
+              <div className='col-7 fw-bold'>Sentence</div>
+              <div className='col-2 fw-bold'>Word</div>
+              <div className='col-3 fw-bold'>Created At</div>
             </li>
 
             {cards.map((card) => (
@@ -151,8 +152,9 @@ const Deck = () => {
                 }}
                 onClick={() => navigate(`/card/${card.id}`)}
               >
-                <div className='col-8'>{card?.sentence}</div>
-                <div className='col-4'>{card?.word}</div>
+                <div className='col-7'>{card?.sentence}</div>
+                <div className='col-2'>{card?.word}</div>
+                <div className='col-3'>{card?.createdAt}</div>
               </li>
             ))}
           </ul>

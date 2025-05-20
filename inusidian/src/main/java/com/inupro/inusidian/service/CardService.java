@@ -2,13 +2,16 @@ package com.inupro.inusidian.service;
 
 import com.inupro.inusidian.entity.Card;
 import com.inupro.inusidian.entity.Deck;
+import com.inupro.inusidian.entity.ReviewInterval;
 import com.inupro.inusidian.entity.dto.CardDTO;
 import com.inupro.inusidian.input.CardInput;
 import com.inupro.inusidian.repository.CardRepository;
 import com.inupro.inusidian.repository.DeckRepository;
+import com.inupro.inusidian.repository.ReviewIntervalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +21,7 @@ import java.util.Optional;
 public class CardService {
     private final CardRepository cardRepository;
     private final DeckRepository deckRepository;
+    private final ReviewIntervalRepository reviewIntervalRepository;
 
     public List<CardDTO> findAllByDeckId(int id) {
         List<Card> cards = cardRepository.findAllByDeckId(id);
@@ -52,7 +56,14 @@ public class CardService {
         card.setCreatedAt(input.getCreatedAt());
         card.setUpdatedAt(input.getUpdatedAt());
 
-        cardRepository.save(card);
+        card = cardRepository.save(card);
+
+        // 単語カード学習記録を作成
+        ReviewInterval reviewInterval = new ReviewInterval();
+        reviewInterval.setCard(card);
+        reviewInterval.setSuccessCount(0);
+        reviewInterval.setNextReviewDate(LocalDate.now());
+        reviewIntervalRepository.save(reviewInterval);
     }
 
     public void update(CardInput input) {

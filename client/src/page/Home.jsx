@@ -94,9 +94,8 @@ const Home = () => {
             style={{
               cursor: 'pointer'
             }}
-            onClick={() => navigateToDeck(deck.id)}
           >
-            <div className='d-flex align-items-center'>
+            <div onClick={() => navigateToDeck(deck.id)} className='d-flex align-items-center'>
               <div
                 className="d-flex justify-content-center align-items-center rounded-circle text-white"
                 style={{width: '40px', height: '40px', marginRight: '16px' , backgroundColor: '#aaa'}}
@@ -110,7 +109,7 @@ const Home = () => {
             </div>
 
             <div>
-              100 words
+              <button onClick={() => navigate(`deck/${deck?.id}/review`)} className="custom-font-size btn custom-btn-blue text-white rounded-pill">Review</button>
             </div>
           </li>
         ))}
