@@ -6,6 +6,7 @@ import Register from './page/Register';
 import Deck from './page/Deck';
 import Card from './page/Card';
 import User from './page/User';
+import Due from './page/Due';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path='/login' element={<Login/>} />
           <Route path='/register' element={<Register/>}/>
           <Route path='/deck/:id' element={<PrivateRoute><Deck /></PrivateRoute>}/>
+          <Route path='/deck/:id/review' element={<PrivateRoute><Due /></PrivateRoute>}/>
           <Route path='/card/:id' element={<PrivateRoute><Card /></PrivateRoute>}/>
           <Route path='/user' element={<PrivateRoute><User /></PrivateRoute>}/>
         </Routes>

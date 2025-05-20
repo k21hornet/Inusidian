@@ -4,38 +4,30 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "cards")
+@Table(name = "review_intervals")
 @Data
 @NoArgsConstructor
-public class Card {
+public class ReviewInterval {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "deck_id", nullable = false)
-    private Deck deck;
+    @OneToOne
+    @JoinColumn(name = "card_id")
+    private Card card;
 
-    private String sentence;
+    private Integer successCount;
 
-    private String word;
-
-    private String pronounce;
-
-    private String meaning;
-
-    private String translate;
+    private LocalDate nextReviewDate;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-    @OneToOne(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ReviewInterval reviewInterval;
 
     @PrePersist
     protected void onCreate() {
