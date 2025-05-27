@@ -2,6 +2,7 @@ package com.inupro.inusidian.service;
 
 import com.inupro.inusidian.entity.User;
 import com.inupro.inusidian.input.NewUserInput;
+import com.inupro.inusidian.input.PasswordInput;
 import com.inupro.inusidian.input.UserUpdateInput;
 import com.inupro.inusidian.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,6 +52,23 @@ public class UserService {
         user.setUsername(input.getUsername());
         user.setEmail(input.getEmail());
 
+        userRepository.save(user);
+    }
+
+    public void updatePassword(PasswordInput input) {
+        Optional<User> userOptional = userRepository.findById(input.getId());
+        if (userOptional.isEmpty()) throw new RuntimeException();
+        User user = userOptional.get();
+
+        if (!passwordEncoder.matches(input.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Current Password Not Match");
+        }
+
+        if (!input.getNewPassword().equals(input.getNewPasswordConfirm())) {
+            throw new RuntimeException("Password Confirm Not Match");
+        }
+
+        user.setPassword(passwordEncoder.encode(input.getNewPassword()));
         userRepository.save(user);
     }
 }
