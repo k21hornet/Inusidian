@@ -67,15 +67,17 @@ const Due = () => {
           <div><span className='fw-bold'>Study now</span></div>
         </div>
 
-        <div className='w-100 h-100 d-flex flex-column align-items-center fs-4'>
+        <div className='w-100 h-100 p-5 d-flex flex-column align-items-center fs-4'>
           {dueCard? (
             <>
-              <p>{dueCard?.card?.sentence}</p>
-              <p>{dueCard?.card?.word}</p>
+              <p className='text-center'>{dueCard?.card?.sentence}</p>
+              <p className='text-center'>{dueCard?.card?.word}</p>
+              <p className='text-center'>{dueCard?.card?.pronounce}</p>
               <hr />
-              <p>{dueCard?.card?.pronounce}</p>
-              <p>{dueCard?.card?.meaning}</p>
-              <p>{dueCard?.card?.translate}</p>
+              <hr />
+              <hr />
+              <p className='text-center'>{dueCard?.card?.meaning}</p>
+              <p className='text-center'>{dueCard?.card?.translate}</p>
 
               <div className='d-flex'>
                 <button onClick={failure} className="m-3 btn btn-primary custom-btn-blue w-100">Hard</button>
