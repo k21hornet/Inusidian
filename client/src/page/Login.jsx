@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
+import AuthTemplate from '../components/templates/AuthTemplate'
+import AuthForm from '../components/organisms/AuthForm'
 
 const Login = () => {
   const [email, setEmail] = useState("")
@@ -9,7 +11,7 @@ const Login = () => {
   const navigate = useNavigate()
   const { setUser } = useUser()
 
-  const login = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
 
     const user = {
@@ -28,40 +30,22 @@ const Login = () => {
   }
 
   return (
-    <div className="container mt-5" style={{ maxWidth: '400px', fontFamily: "'Poppins', sans-serif" }}>
-      <h2 className="mb-4 text-center">Sign In</h2>
+    <AuthTemplate title="Sign In">
 
-      <div>
-        <form onSubmit={login}>
-          <div className="mb-3">
-            <label className="form-label small">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="form-control"
-            />
-          </div>
+      <AuthForm
+        onSubmit={handleLogin}
+        submitText="Sign In"
+        fields={[
+          { label: 'Email',    type: 'email',    name: 'email',    value: email,    onChange: (e) => setEmail(e.target.value) },
+          { label: 'Password', type: 'password', name: 'password', value: password, onChange: (e) => setPassword(e.target.value) },
+        ]}
+      />
 
-          <div className="mb-3">
-            <label className="form-label small">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="form-control"
-            />
-          </div>
-          <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Sign In</button>
-        </form>
+      <p className='mt-10 text-center text-sm/6'>
+        <Link to={"/register"} className="font-semibold text-indigo-600 hover:text-indigo-500">If you don't have any account, click here.</Link>
+      </p>
 
-        <Link to={"/register"} className='custom-a-link'>If you don't have any account, click here.</Link>
-      </div>
-    </div>
+    </AuthTemplate>
   )
 }
 

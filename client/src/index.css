@@ -1,4 +1,14 @@
+@import "tailwindcss";
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body {
+    height: 100vh;
+}
+
+#root {
+    height: 100vh;
+}
 
 /* カスタムボタン色 */
 .custom-btn-blue {

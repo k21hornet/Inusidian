@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
+import AuthTemplate from '../components/templates/AuthTemplate'
+import AuthForm from '../components/organisms/AuthForm'
 
 const Register = () => {
   const [username, setUsername] = useState("")
@@ -11,7 +13,7 @@ const Register = () => {
   const navigate = useNavigate()
   const { setUser } = useUser()
 
-  const register = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault()
 
     const user = {
@@ -31,65 +33,24 @@ const Register = () => {
   }
   
   return (
-    <div className="container mt-5" style={{ maxWidth: '400px' }}>
-      <h2 className="mb-4 text-center">Sign Up</h2>
+    <AuthTemplate title="Sign Up">
 
-      <div>
-        <form onSubmit={register}>
-          <div className="mb-3">
-            <label className="form-label small">User Name</label>
-            <input
-              type="username"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="form-control"
-            />
-          </div>
+      <AuthForm
+        onSubmit={handleRegister}
+        submitText="Sign Up"
+        fields={[
+          { label: 'User Name',        type: 'text',     name: 'username',        value: username,        onChange: (e) => setUsername(e.target.value) },
+          { label: 'Email',            type: 'email',    name: 'email',           value: email,           onChange: (e) => setEmail(e.target.value) },
+          { label: 'Password',         type: 'password', name: 'password',        value: password,        onChange: (e) => setPassword(e.target.value) },
+          { label: 'Password Confirm', type: 'password', name: 'passwordConfirm', value: passwordConfirm, onChange: (e) => setPasswordConfirm(e.target.value) },
+        ]}
+      />
 
-          <div className="mb-3">
-            <label className="form-label small">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="form-control"
-            />
-          </div>
+      <p className='mt-10 text-center text-sm/6'>
+        <Link to={"/login"} className="font-semibold text-indigo-600 hover:text-indigo-500">If you have an account, click here.</Link>
+      </p>
 
-          <div className="mb-3">
-            <label className="form-label small">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="form-control"
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label small">Password Confirm</label>
-            <input
-              type="password"
-              name="passwordConfirm"
-              value={passwordConfirm}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
-              required
-              className="form-control"
-            />
-          </div>
-
-          <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Sign Up</button>
-        </form>
-
-        <Link to={"/login"} className='custom-a-link'>If you have an account, click here.</Link>
-      </div>
-    </div>
+    </AuthTemplate>
   )
 }
 
