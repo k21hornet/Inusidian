@@ -11,7 +11,7 @@ import Due from './page/Due';
 function App() {
 
   return (
-    <div className="App">
+    <div className="h-full">
       <Router>
         <Routes>
           <Route path='/' element={<PrivateRoute><Home /></PrivateRoute>}/>

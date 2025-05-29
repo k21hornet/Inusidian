@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
 import { useNavigate, useParams } from 'react-router-dom'
+import BaseTemplate from '../components/templates/BaseTemplate'
 
 const Deck = () => {
   const [deck, setDeck] = useState()
@@ -112,203 +112,194 @@ const Deck = () => {
     }
   }
 
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr)
+    return date.toISOString().split('T')[0]  // 'YYYY-MM-DD'
+}
+
   useEffect(() => {
     fetchDeck()
   },[])
 
   return (
-    <div className='bg-light min-vh-100 w-100 d-flex flex-column align-items-center overflow-hidden'>
-      <Header />
+    <BaseTemplate>
 
-      <div
-        className="card m-4 shadow-lg rounded-4 w-100"
-        style={{
-          maxWidth: '1000px',
-          height: '86vh',
-          overflowY: 'auto',
-        }}
-      >
-        <div className="card-header d-flex justify-content-between align-items-center">
-          <div><span className='fw-bold'>{deck?.deckName}</span></div>
-          <div>
-            <button onClick={openModal2} className="custom-font-size btn custom-btn-blue text-white rounded-pill">Edit deck</button>
-            <button onClick={openModal} className="custom-font-size btn custom-btn-blue text-white rounded-pill">Add card</button>
-          </div>
-        </div>
+      <div className="flex flex-col items-center w-full max-w-5xl">
+        <h1 className='text-3xl my-10'>{deck?.deckName}</h1>
 
-        <div className="card-body d-flex flex-column align-items-center">
-          <ul className="w-100 list-group list-group-flush">
-            <li className="list-group-item row d-flex">
-              <div className='col-7 fw-bold'>Sentence</div>
-              <div className='col-2 fw-bold'>Word</div>
-              <div className='col-3 fw-bold'>Created At</div>
+        <ul 
+          className="w-full divide-y divide-gray-100 overflow-y-auto"
+          style={{ maxHeight: 'calc(100vh - 300px)' }}
+        >
+          <li className="flex font-bold justify-between py-2 bg-white sticky top-0 z-10">
+            <div className='w-2/12'>Word</div>
+            <div className='w-8/12'>Sentence</div>
+            <div className='w-2/12'>Created At</div>
+          </li>
+
+          {cards.map((card) => (
+            <li className="flex justify-between py-2" onClick={() => navigate(`/card/${card.id}`)}>
+              <div className='w-2/12'>{card?.word}</div>
+              <div className='w-8/12'>{card?.sentence}</div>
+              <div className='w-2/12'>{formatDate(card?.createdAt)}</div>
             </li>
+          ))}
+        </ul>
 
-            {cards.map((card) => (
-              <li
-                className="list-group-item row d-flex"
-                style={{
-                  cursor: 'pointer'
-                }}
-                onClick={() => navigate(`/card/${card.id}`)}
-              >
-                <div className='col-7'>{card?.sentence}</div>
-                <div className='col-2'>{card?.word}</div>
-                <div className='col-3'>{card?.createdAt}</div>
-              </li>
-            ))}
-          </ul>
+        <div className='w-64 flex mt-5'>
+          <button 
+            onClick={openModal2} 
+            className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >Edit Deck</button>
+          <button 
+            onClick={openModal} 
+            className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >Create Card</button>
         </div>
+
       </div>
 
       {showModal && (
         <div
-          className="modal fade show d-block"
-          tabIndex="-1"
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={closeModal}
         >
           <div 
-            className="modal-dialog modal-dialog-centered"
-            onClick={(e) => e.stopPropagation()} // モーダル本体のクリックは無視
+            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-content">
-              <div className="modal-body">
-                <h3 className='text-center'>Create new card</h3>
+            <h3 className='text-xl font-semibold text-center mb-4'>Create new card</h3>
 
-                <form onSubmit={createCard}>
-                  <div className="mb-3">
-                    <label className="form-label small">Sentence</label>
-                    <input
-                      type="text"
-                      name="sentence"
-                      value={sentence}
-                      onChange={(e) => setSentence(e.target.value)}
-                      required
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small">Word</label>
-                    <input
-                      type="text"
-                      name="word"
-                      value={word}
-                      onChange={(e) => setWord(e.target.value)}
-                      required
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small">Pronounce</label>
-                    <input
-                      type="text"
-                      name="pronounce"
-                      value={pronounce}
-                      onChange={(e) => setPronounce(e.target.value)}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small">Meaning</label>
-                    <input
-                      type="text"
-                      name="meaning"
-                      value={meaning}
-                      onChange={(e) => setMeaning(e.target.value)}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small">Translate</label>
-                    <input
-                      type="text"
-                      name="translate"
-                      value={translate}
-                      onChange={(e) => setTranslate(e.target.value)}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Save</button>
-
-                </form>
-
-                <div className='text-end'>
-                  <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
-                </div>
-
+            <form onSubmit={createCard} className='space-y-6'>
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">Sentence</label>
+                <input
+                  type="text"
+                  name="sentence"
+                  value={sentence}
+                  onChange={(e) => setSentence(e.target.value)}
+                  required
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
               </div>
+
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">Word</label>
+                <input
+                  type="text"
+                  name="word"
+                  value={word}
+                  onChange={(e) => setWord(e.target.value)}
+                  required
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">Pronounce</label>
+                <input
+                  type="text"
+                  name="pronounce"
+                  value={pronounce}
+                  onChange={(e) => setPronounce(e.target.value)}
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">Meaning</label>
+                <input
+                  type="text"
+                  name="meaning"
+                  value={meaning}
+                  onChange={(e) => setMeaning(e.target.value)}
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">Translate</label>
+                <input
+                  type="text"
+                  name="translate"
+                  value={translate}
+                  onChange={(e) => setTranslate(e.target.value)}
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >Save</button>
+
+            </form>
+
+            <div className='text-end'>
+              <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
             </div>
+
           </div>
         </div>
       )}
 
       {showModal2 && (
         <div
-          className="modal fade show d-block"
-          tabIndex="-1"
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
-          onClick={closeModal2}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={closeModal}
         >
           <div 
-            className="modal-dialog modal-dialog-centered"
-            onClick={(e) => e.stopPropagation()} // モーダル本体のクリックは無視
+            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-content">
-              <div className="modal-body">
-                <h3 className='text-center'>Edit Deck</h3>
+            <h3 className='text-xl font-semibold text-center mb-4'>Edit Deck</h3>
 
-                <form onSubmit={editDeck}>
-                  <div className="mb-3">
-                    <label className="form-label small">Deck Name</label>
-                    <input
-                      type="text"
-                      name="deckName"
-                      value={deckName}
-                      onChange={(e) => setDeckName(e.target.value)}
-                      required
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small">Description</label>
-                    <textarea
-                      type="text"
-                      name="deckDescription"
-                      value={deckDescription}
-                      onChange={(e) => setDeckDescription(e.target.value)}
-                      required
-                      className="form-control"
-                    />
-                  </div>
-
-                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Save</button>
-
-                  <button onClick={deleteDeck} className="mb-3 btn btn-primary custom-btn-blue w-100">Delete this deck</button>
-
-                </form>
-
-                <div className='text-end'>
-                  <span onClick={closeModal2} style={{color: '#615fff'}}>Close</span>
-                </div>
-
+            <form onSubmit={editDeck} className='space-y-6'>
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">Deck Name</label>
+                <input
+                  type="text"
+                  name="deckName"
+                  value={deckName}
+                  onChange={(e) => setDeckName(e.target.value)}
+                  required
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
               </div>
+
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">Description</label>
+                <textarea
+                  type="text"
+                  name="deckDescription"
+                  value={deckDescription}
+                  onChange={(e) => setDeckDescription(e.target.value)}
+                  required
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >Save</button>
+
+              <button 
+                onClick={deleteDeck} 
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >Delete this deck</button>
+
+            </form>
+
+            <div className='text-end'>
+              <span onClick={closeModal2} style={{color: '#615fff'}}>Close</span>
             </div>
+
           </div>
         </div>
       )}
 
-    </div>
+    </BaseTemplate>
   )
 }
 

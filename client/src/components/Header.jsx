@@ -1,8 +1,9 @@
 import axios from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false)
   const navigate = useNavigate()
 
   const logout = async () => {
@@ -18,22 +19,41 @@ const Header = () => {
   }
 
   return (
-    <nav className="w-100 navbar navbar-expand-lg custom-navbar px-5 py-2 shadow bg-white">
-      <div>
-        <Link to="/" className="navbar-brand fs-4">INUSIDIAN</Link>
-      </div>
+    <header className='w-full shadow text-indigo-900'>
+      <nav className="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8">
+        <div>
+          <Link to="/" className="text-2xl font-bold hover:text-indigo-600">INUSIDIAN</Link>
+        </div>
 
-      <div className="ms-auto d-flex align-items-center gap-3">
-        <Link to="/#" className="nav-link custom-nav-link">Help</Link>
-        <Link to="/user" className="nav-link custom-nav-link">User Info</Link>
-        <Link to="/" className="nav-link custom-nav-link">All Decks</Link>
-        <button
-          className="btn custom-btn-blue text-white rounded-pill"
-          onClick={logout}
-         >
-          Logout</button>
-      </div>
-    </nav>
+        <div className="flex space-x-6 items-center w-10">
+          <button className='bg-indigo-100 rounded-full' onClick={() => setDropdownOpen(!dropdownOpen)}>
+            <img src={import.meta.env.VITE_LINK + "/ikemen.png"} alt="X" className='rounded-full'/>
+          </button>
+        </div>
+
+        {dropdownOpen && (
+          <div className="absolute top-12 right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 z-50">
+            <Link
+              to="/user"
+              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline"
+              onClick={() => setDropdownOpen(false)}
+            >
+              User Info
+            </Link>
+            <button
+              onClick={() => {
+                setDropdownOpen(false)
+                logout()
+              }}
+              className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+            >
+              Logout
+            </button>
+          </div>
+        )}
+
+      </nav>
+    </header>
   )
 }
 
