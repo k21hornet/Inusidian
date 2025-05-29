@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import { useUser } from '../contexts/UserContext'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import BaseTemplate from '../components/templates/BaseTemplate'
 
 const User = () => {
   const [username, setUsername] = useState("")
@@ -62,114 +63,115 @@ const User = () => {
   },[])
 
   return (
-    <div>
-      <div className='bg-light min-vh-100 w-100 d-flex flex-column align-items-center overflow-hidden'>
-      <Header />
+    <BaseTemplate>
 
-      <div className='m-4 w-75' style={{ maxWidth: '400px' }}>
-        <h2 className="mb-4 text-center">UserInfo</h2>
+      <div className="flex flex-col items-center w-full max-w-5xl">
+        <h1 className='text-3xl my-10'>UserInfo</h1>
 
-        <form onSubmit={update}>
-          <div className="mb-3">
-            <label className="form-label small">ユーザー名</label>
-            <input
-              type="username"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="form-control"
-            />
-          </div>
+        <div className='w-full max-w-md'>
+          <form onSubmit={update} className='space-y-6'>
+            <div>
+              <label className="block text-sm/6 font-medium text-gray-900">ユーザー名</label>
+              <input
+                type="username"
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
 
-          <div className="mb-3">
-            <label className="form-label small">メールアドレス</label>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="form-control"
-            />
-          </div>
+            <div>
+              <label className="block text-sm/6 font-medium text-gray-900">メールアドレス</label>
+              <input
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
 
-          <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Update UserInfo</button>
-        </form>
+            <button 
+              type="submit" 
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >Update UserInfo</button>
+          </form>
 
-        <button type="submit" onClick={openModal} className="mb-3 btn btn-primary custom-btn-blue w-100">Update Password</button>
+            <button 
+              onClick={openModal} 
+              className="mt-6 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >Update Password</button>
+        </div>
+
 
       </div>
 
       {showModal && (
         <div
-          className="modal fade show d-block"
-          tabIndex="-1"
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={closeModal}
         >
           <div 
-            className="modal-dialog modal-dialog-centered"
-            onClick={(e) => e.stopPropagation()} // モーダル本体のクリックは無視
+            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-content">
-              <div className="modal-body">
-                <h3 className='text-center'>Update Password</h3>
+            <h3 className='text-xl font-semibold text-center mb-4'>Update Password</h3>
 
-                <form onSubmit={updatePassword}>
-                  <div className="mb-3">
-                    <label className="form-label small">Current Password</label>
-                    <input
-                      type="text"
-                      name="oldPassword"
-                      value={oldPassword}
-                      onChange={(e) => setOldPassword(e.target.value)}
-                      required
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small">New Password</label>
-                    <input
-                      type="text"
-                      name="newPassword"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      required
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small">New Password Confirm</label>
-                    <input
-                      type="text"
-                      name="newPasswordConfirm"
-                      value={newPasswordConfirm}
-                      onChange={(e) => setNewPasswordCofirm(e.target.value)}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <button type="submit" className="mb-3 btn btn-primary custom-btn-blue w-100">Save</button>
-
-                </form>
-
-                <div className='text-end'>
-                  <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
-                </div>
-
+            <form onSubmit={updatePassword} className='space-y-6'>
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">Current Password</label>
+                <input
+                  type="text"
+                  name="oldPassword"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  required
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
               </div>
+
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">New Password</label>
+                <input
+                  type="text"
+                  name="newPassword"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">New Password Confirm</label>
+                <input
+                  type="text"
+                  name="newPasswordConfirm"
+                  value={newPasswordConfirm}
+                  onChange={(e) => setNewPasswordCofirm(e.target.value)}
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >Save</button>
+
+            </form>
+
+            <div className='text-end'>
+              <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
             </div>
+
           </div>
         </div>
       )}
 
-      </div>
-    </div>
+    </BaseTemplate>
   )
 }
 
