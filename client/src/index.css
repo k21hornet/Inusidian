@@ -1,43 +1,7 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap'); */
 
-body {
+body, #root {
     height: 100vh;
-}
-
-#root {
-    height: 100vh;
-}
-
-/* カスタムボタン色 */
-.custom-btn-blue {
-    background-color: #4f39f6;
-}
-
-.custom-btn-blue:hover {
-    background-color: #615fff;
-}
-
-.custom-a-link {
-    color: #4f39f6;
-    text-decoration: none;
-}
-
-.custom-a-link:hover {
-    color: #615fff;
-    text-decoration: none;
-}
-
-.custom-nav-link {
-    color: #6c757d; /* text-muted */
-    transition: color 0.2s;
-}
-  
-.custom-nav-link:hover {
-    color: #615fff;
-}
-
-.custom-font-size {
-    font-size: 12px;
 }
