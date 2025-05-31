@@ -7,4 +7,5 @@ docker-compose up
 ~~~
 docker-compose exec db /bin/bash
 mysql -u root -p inusidian
+pass
 ~~~

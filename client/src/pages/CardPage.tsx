@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import BaseTemplate from '../components/templates/BaseTemplate'
+import type { Card } from '../types/Card'
 
-const Card = () => {
-  const [card, setCard] = useState([])
-  const [deckId, setDeckId] = useState()
+const CardPage = () => {
+  const [card, setCard] = useState<Card>()
+  const [deckId, setDeckId] = useState<number>()
 
-  const [sentence, setSentence] = useState("")
-  const [word, setWord] = useState("")
-  const [pronounce, setPronounce] = useState("")
-  const [meaning, setMeaning] = useState("")
-  const [translate, setTranslate] = useState("")
+  const [sentence, setSentence] = useState<string>("")
+  const [word, setWord] = useState<string>("")
+  const [pronounce, setPronounce] = useState<string>("")
+  const [meaning, setMeaning] = useState<string>("")
+  const [translate, setTranslate] = useState<string>("")
 
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState<boolean>(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
+
+  useEffect(() => {
+    fetchCard()
+  }, [])
 
   // カードを取得
   const fetchCard = async () => {
@@ -41,7 +45,7 @@ const Card = () => {
   }
 
   // カード情報編集
-  const editCard = async (e) => {
+  const editCard = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const card = {
       id,
@@ -84,10 +88,6 @@ const Card = () => {
     }
   }
 
-  useEffect(() => {
-    fetchCard()
-  }, [])
-
   return (
     <BaseTemplate>
 
@@ -114,7 +114,7 @@ const Card = () => {
 
         <div className='w-64 flex mt-5'>
           <button 
-            onClick={() => navigate(`/deck/${card.deckId}`)}
+            onClick={() => navigate(`/deck/${card?.deckId}`)}
             className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >Back</button>
           <button 
@@ -219,4 +219,4 @@ const Card = () => {
   )
 }
 
-export default Card
+export default CardPage

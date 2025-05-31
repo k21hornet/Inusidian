@@ -1,6 +1,10 @@
 import React from 'react'
 
-const AuthButton = ({ submitText }) => {
+type AuthButtonProps = {
+  submitText: string
+}
+
+const AuthButton: React.FC<AuthButtonProps> = ({ submitText }) => {
   return (
     <button 
       type="submit" 

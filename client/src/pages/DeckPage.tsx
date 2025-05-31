@@ -1,18 +1,20 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import BaseTemplate from '../components/templates/BaseTemplate'
+import type { Deck } from '../types/Deck'
+import type { Card } from '../types/Card'
 
-const Deck = () => {
-  const [deck, setDeck] = useState()
-  const [cards, setCards] = useState([])
-  const [deckName, setDeckName] = useState("")
-  const [deckDescription, setDeckDescription] = useState("")
+const DeckPage = () => {
+  const [deck, setDeck] = useState<Deck>()
+  const [cards, setCards] = useState<Card[]>([])
+  const [deckName, setDeckName] = useState<string>("")
+  const [deckDescription, setDeckDescription] = useState<string>("")
 
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState<boolean>(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
-  const [showModal2, setShowModal2] = useState(false)
+  const [showModal2, setShowModal2] = useState<boolean>(false)
   const openModal2 = () => setShowModal2(true)
   const closeModal2 = () => setShowModal2(false)
 
@@ -36,7 +38,7 @@ const Deck = () => {
   }
 
   // デッキ情報編集
-  const editDeck = async (e) => {
+  const editDeck = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const deck = {
       id,
@@ -74,13 +76,13 @@ const Deck = () => {
   }
 
   // 新規カード作成
-  const [sentence, setSentence] = useState("")
-  const [word, setWord] = useState("")
-  const [pronounce, setPronounce] = useState("")
-  const [meaning, setMeaning] = useState("")
-  const [translate, setTranslate] = useState("")
+  const [sentence, setSentence] = useState<string>("")
+  const [word, setWord] = useState<string>("")
+  const [pronounce, setPronounce] = useState<string>("")
+  const [meaning, setMeaning] = useState<string>("")
+  const [translate, setTranslate] = useState<string>("")
 
-  const createCard = async (e) => {
+  const createCard = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const card = {
@@ -112,7 +114,7 @@ const Deck = () => {
     }
   }
 
-  const formatDate = (dateStr) => {
+  const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
     return date.toISOString().split('T')[0]  // 'YYYY-MM-DD'
 }
@@ -138,9 +140,9 @@ const Deck = () => {
           </li>
 
           {cards.map((card) => (
-            <li className="flex justify-between py-2" onClick={() => navigate(`/card/${card.id}`)}>
-              <div className='w-2/12'>{card?.word}</div>
-              <div className='w-8/12'>{card?.sentence}</div>
+            <li className="flex justify-between py-2" onClick={() => navigate(`/card/${card.id}`)} key={card.id}>
+              <div className='w-2/12 line-clamp-1'>{card?.word}</div>
+              <div className='w-8/12 line-clamp-1'>{card?.sentence}</div>
               <div className='w-2/12'>{formatDate(card?.createdAt)}</div>
             </li>
           ))}
@@ -246,7 +248,7 @@ const Deck = () => {
       {showModal2 && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={closeModal}
+          onClick={closeModal2}
         >
           <div 
             className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
@@ -270,7 +272,6 @@ const Deck = () => {
               <div>
                 <label className="block text-sm/6 font-medium text-gray-900">Description</label>
                 <textarea
-                  type="text"
                   name="deckDescription"
                   value={deckDescription}
                   onChange={(e) => setDeckDescription(e.target.value)}
@@ -303,4 +304,4 @@ const Deck = () => {
   )
 }
 
-export default Deck
+export default DeckPage
