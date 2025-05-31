@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import BaseTemplate from '../components/templates/BaseTemplate'
+import type { Due } from '../types/Due'
 
-const Due = () => {
-  const [dueCard, setDueCard] = useState()
-  const [cardCount, setCardCount] = useState()
+const DuePage = () => {
+  const [dueCard, setDueCard] = useState<Due | null>()
+  const [cardCount, setCardCount] = useState<number>()
 
   const { id } = useParams()
   const navigate = useNavigate()
-  const [showModal, setShowModal] = useState(true)
+  const [showModal, setShowModal] = useState<boolean>(true)
   const closeModal = () => setShowModal(false)
 
   // 正解表示を切り替え
@@ -36,6 +36,8 @@ const Due = () => {
 
   // 問題正解時
   const success = async () => {
+    if (!dueCard) return
+
     try {
       await axios.post(`${import.meta.env.VITE_API}/review/${dueCard.id}/success`, null, {withCredentials: true})
       await fetchDue()
@@ -47,6 +49,8 @@ const Due = () => {
 
   // 問題不正解時
   const failure = async () => {
+    if (!dueCard) return
+    
     try {
       await axios.post(`${import.meta.env.VITE_API}/review/${dueCard.id}/failure`, null, {withCredentials: true})
       await fetchDue()
@@ -153,4 +157,4 @@ const Due = () => {
   )
 }
 
-export default Due
+export default DuePage

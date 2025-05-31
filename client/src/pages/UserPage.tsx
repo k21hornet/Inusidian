@@ -1,24 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
+import { useEffect, useState } from 'react'
 import { useUser } from '../contexts/UserContext'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import BaseTemplate from '../components/templates/BaseTemplate'
 
-const User = () => {
+const UserPage = () => {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordCofirm] = useState("");
-  const { user, setUser } = useUser()
-
+  
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
   const navigate = useNavigate()
 
-  const update = async (e) => {
+  useEffect(() => {
+    setUserInfo()
+  },[])
+  
+  const { user, setUser } = useUser()
+  if (!user) return <Navigate to="/signin" />
+
+  const setUserInfo = () => {
+    setUsername(user.username)
+    setEmail(user.email)
+  }
+
+  const update = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const updateUser = {
@@ -37,7 +47,7 @@ const User = () => {
     }
   }
 
-  const updatePassword = async (e) => {
+  const updatePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const updateUser = {
@@ -56,11 +66,6 @@ const User = () => {
       console.log(e)      
     }
   }
-
-  useEffect(() => {
-    setUsername(user.username)
-    setEmail(user.email)
-  },[])
 
   return (
     <BaseTemplate>
@@ -175,4 +180,4 @@ const User = () => {
   )
 }
 
-export default User
+export default UserPage
