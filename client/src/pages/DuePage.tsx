@@ -87,7 +87,7 @@ const DuePage = () => {
               {showAnswers && (
                 <>
                   <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.meaning}</p>
-                  <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.translate}</p>
+                  <p className="flex text-xl justify-between py-2 text-center italic">{dueCard?.card?.translate}</p>
                 </>
               )}
 
