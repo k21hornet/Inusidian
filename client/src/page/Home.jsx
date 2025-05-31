@@ -78,7 +78,7 @@ const Home = () => {
           style={{ maxHeight: 'calc(100vh - 300px)' }}
         >
         {decks.map((deck) => (
-          <li className="flex justify-between py-2">
+          <li className="flex justify-between py-2" key={deck.id}>
             <div onClick={() => navigateToDeck(deck.id)} className='flex items-center'>
               <div
                 className="d-flex justify-content-center align-items-center rounded-full text-white"

@@ -138,7 +138,7 @@ const Deck = () => {
           </li>
 
           {cards.map((card) => (
-            <li className="flex justify-between py-2" onClick={() => navigate(`/card/${card.id}`)}>
+            <li className="flex justify-between py-2" onClick={() => navigate(`/card/${card.id}`)} key={card.id}>
               <div className='w-2/12'>{card?.word}</div>
               <div className='w-8/12'>{card?.sentence}</div>
               <div className='w-2/12'>{formatDate(card?.createdAt)}</div>

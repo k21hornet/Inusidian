@@ -60,6 +60,7 @@ public class ReviewService {
                 cardService.createDTO(reviewInterval.getCard()),
                 reviewInterval.getSuccessCount(),
                 reviewInterval.getNextReviewDate(),
+                calcNextDateDiff(reviewInterval.getSuccessCount()),
                 reviewInterval.getCreatedAt(),
                 reviewInterval.getUpdatedAt()
         );
@@ -73,13 +74,31 @@ public class ReviewService {
     private LocalDate calcNextReviewDate(int count) {
         switch (count) {
             case 1: return LocalDate.now().plusDays(1);
-            case 2: return LocalDate.now().plusDays(3);
-            case 3: return LocalDate.now().plusDays(6);
-            case 4: return LocalDate.now().plusDays(10);
-            case 5: return LocalDate.now().plusDays(15);
-            case 6: return LocalDate.now().plusDays(21);
-            case 7: return LocalDate.now().plusDays(28);
-            default: return LocalDate.now().plusDays(36);
+            case 2: return LocalDate.now().plusDays(2);
+            case 3: return LocalDate.now().plusDays(3);
+            case 4: return LocalDate.now().plusDays(5);
+            case 5: return LocalDate.now().plusDays(8);
+            case 6: return LocalDate.now().plusDays(13);
+            case 7: return LocalDate.now().plusDays(21);
+            default: return LocalDate.now().plusDays(34);
+        }
+    }
+
+    /**
+     * 問題に正解した場合、次に出題されるまで何日か
+     * @param count
+     * @return
+     */
+    private int calcNextDateDiff(int count) {
+        switch (count) {
+            case 0: return 1;
+            case 1: return 2;
+            case 2: return 3;
+            case 3: return 5;
+            case 4: return 8;
+            case 5: return 13;
+            case 6: return 21;
+            default: return 34;
         }
     }
 }

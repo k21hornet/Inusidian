@@ -6,11 +6,16 @@ import BaseTemplate from '../components/templates/BaseTemplate'
 
 const Due = () => {
   const [dueCard, setDueCard] = useState()
+  const [cardCount, setCardCount] = useState()
 
   const { id } = useParams()
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(true)
   const closeModal = () => setShowModal(false)
+
+  // 正解表示を切り替え
+  const [showAnswers, setShowAnswers] = useState(false)
+  const toggleAnswers = () => setShowAnswers(prev => !prev)
 
   // 今日の単語リストを取得し、ランダムで一問出題する
   const fetchDue = async () => {
@@ -20,6 +25,7 @@ const Due = () => {
       if (res.data.length > 0) {
         const randomNum = Math.floor(Math.random() * res.data.length)
         setDueCard(res.data[randomNum])
+        setCardCount(res.data.length)
       } else {
         setDueCard(null)
       }
@@ -33,6 +39,7 @@ const Due = () => {
     try {
       await axios.post(`${import.meta.env.VITE_API}/review/${dueCard.id}/success`, null, {withCredentials: true})
       await fetchDue()
+       setShowAnswers(false)
     } catch (e) {
       console.log(e)      
     }
@@ -43,6 +50,7 @@ const Due = () => {
     try {
       await axios.post(`${import.meta.env.VITE_API}/review/${dueCard.id}/failure`, null, {withCredentials: true})
       await fetchDue()
+      setShowAnswers(false)
     } catch (e) {
       console.log(e)      
     }
@@ -63,20 +71,39 @@ const Due = () => {
             <>
               <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.sentence}</p>
               <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.word}</p>
-              <p className="flex text-xl justify-between py-2 text-center mb-30">{dueCard?.card?.pronounce}</p>
+              <p className="flex text-xl justify-between py-2 text-center mb-10">{dueCard?.card?.pronounce}</p>
 
-              <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.meaning}</p>
-              <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.translate}</p>
+              <button
+                onClick={toggleAnswers}
+                className="flex items-center gap-2 text-indigo-600 font-semibold hover:underline"
+              >
+                Answer {showAnswers ? " - " : " + "}
+              </button>
 
-              <div className='flex mt-10'>
-                <button 
-                  onClick={failure} 
-                  className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >Hard</button>
-                <button 
-                  onClick={success} 
-                  className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >Easy</button>
+              {showAnswers && (
+                <>
+                  <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.meaning}</p>
+                  <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.translate}</p>
+                </>
+              )}
+
+
+              <div className='flex mt-8'>
+                <div className='flex flex-col items-center m-1'>
+                  <p className='text-gray-500'>0 day</p>
+                  <button 
+                    onClick={failure} 
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >Again</button>
+                </div>
+                
+                <div className='flex flex-col items-center m-1'>
+                  <p className='text-gray-500'>{dueCard?.nextDateDiff} day</p>
+                  <button 
+                    onClick={success} 
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >Easy</button>
+                </div>
               </div>
             </>
           ) : (
@@ -102,7 +129,7 @@ const Due = () => {
           <div 
             className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
           >
-            <h3 className='text-center text-2xl'>Are you ready?</h3>
+            <h3 className='text-center text-2xl'>Are you ready? ({cardCount})</h3>
             <br />
             <div className='flex'>
               <button 
