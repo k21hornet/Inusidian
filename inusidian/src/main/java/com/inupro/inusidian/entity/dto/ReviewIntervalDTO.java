@@ -18,6 +18,8 @@ public class ReviewIntervalDTO {
 
     private LocalDate nextReviewDate;
 
+    private Integer nextDateDiff;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

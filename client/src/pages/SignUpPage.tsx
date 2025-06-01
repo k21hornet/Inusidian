@@ -5,7 +5,7 @@ import { useUser } from '../contexts/UserContext'
 import AuthTemplate from '../components/templates/AuthTemplate'
 import AuthForm from '../components/organisms/AuthForm'
 
-const Register = () => {
+const SignUpPage = () => {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -13,7 +13,7 @@ const Register = () => {
   const navigate = useNavigate()
   const { setUser } = useUser()
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const user = {
@@ -39,19 +39,19 @@ const Register = () => {
         onSubmit={handleRegister}
         submitText="Sign Up"
         fields={[
-          { label: 'User Name',        type: 'text',     name: 'username',        value: username,        onChange: (e) => setUsername(e.target.value) },
-          { label: 'Email',            type: 'email',    name: 'email',           value: email,           onChange: (e) => setEmail(e.target.value) },
-          { label: 'Password',         type: 'password', name: 'password',        value: password,        onChange: (e) => setPassword(e.target.value) },
-          { label: 'Password Confirm', type: 'password', name: 'passwordConfirm', value: passwordConfirm, onChange: (e) => setPasswordConfirm(e.target.value) },
+          { label: 'User Name',        type: 'text',     name: 'username',        value: username,        onChange: (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value) },
+          { label: 'Email',            type: 'email',    name: 'email',           value: email,           onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value) },
+          { label: 'Password',         type: 'password', name: 'password',        value: password,        onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value) },
+          { label: 'Password Confirm', type: 'password', name: 'passwordConfirm', value: passwordConfirm, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value) },
         ]}
       />
 
       <p className='mt-10 text-center text-sm/6'>
-        <Link to={"/login"} className="font-semibold text-indigo-600 hover:text-indigo-500">If you have an account, click here.</Link>
+        <Link to={"/signin"} className="font-semibold text-indigo-600 hover:text-indigo-500">If you have an account, click here.</Link>
       </p>
 
     </AuthTemplate>
   )
 }
 
-export default Register
+export default SignUpPage

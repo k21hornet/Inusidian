@@ -1,21 +1,27 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import {  Navigate, useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
 import BaseTemplate from '../components/templates/BaseTemplate'
+import type { Deck } from '../types/Deck'
 
-const Home = () => {
-  const { user } = useUser()
-  const [decks, setDecks] = useState([])
-  const [deckName, setDeckName] = useState("")
-  const [deckDescription, setDeckDescription] = useState("")
+const HomePage = () => {
+  const navigate = useNavigate()
+  
+  const [decks, setDecks] = useState<Deck[]>([])
+  const [deckName, setDeckName] = useState<string>("")
+  const [deckDescription, setDeckDescription] = useState<string>("")
 
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
-  const navigate = useNavigate()
+  useEffect(() => {
+    fetchDecks()
+  }, [])
 
+  const { user } = useUser()
+  if (!user) return <Navigate to="/signin" />
 
   // デッキ一覧を取得
   const fetchDecks = async () => {
@@ -32,7 +38,7 @@ const Home = () => {
 
 
   // 新規デッキ作成
-  const createDeck = async (e) => {
+  const createDeck = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const deck = {
       userId: user.id,
@@ -57,14 +63,9 @@ const Home = () => {
     }
   }
 
-  const navigateToDeck = (id) => {
+  const navigateToDeck = (id: number) => {
     navigate(`/deck/${id}`)
   }
-
-
-  useEffect(() => {
-    fetchDecks()
-  }, [])
 
 
   return (
@@ -78,7 +79,7 @@ const Home = () => {
           style={{ maxHeight: 'calc(100vh - 300px)' }}
         >
         {decks.map((deck) => (
-          <li className="flex justify-between py-2">
+          <li className="flex justify-between py-2" key={deck.id}>
             <div onClick={() => navigateToDeck(deck.id)} className='flex items-center'>
               <div
                 className="d-flex justify-content-center align-items-center rounded-full text-white"
@@ -137,7 +138,6 @@ const Home = () => {
               <div>
                 <label className="block text-sm/6 font-medium text-gray-900">Description</label>
                 <textarea
-                  type="text"
                   name="deckDescription"
                   value={deckDescription}
                   onChange={(e) => setDeckDescription(e.target.value)}
@@ -164,4 +164,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomePage

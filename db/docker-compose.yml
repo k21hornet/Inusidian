@@ -6,7 +6,7 @@ services:
       MYSQL_ROOT_PASSWORD: pass
       MYSQL_DATABASE: inusidian
     ports:
-      - "3306:3306"
+      - "13306:3306"
     volumes:
       - ./tmp/db:/var/lib/mysql
     restart: always
