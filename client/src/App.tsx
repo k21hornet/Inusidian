@@ -11,19 +11,17 @@ import HomePage from './pages/HomePage';
 function App() {
 
   return (
-    <div className="h-full">
-      <Router>
-        <Routes>
-          <Route path='/' element={<PrivateRoute><HomePage /></PrivateRoute>}/>
-          <Route path='/signin' element={<SignInPage/>} />
-          <Route path='/signup' element={<SignUpPage/>}/>
-          <Route path='/deck/:id' element={<PrivateRoute><DeckPage /></PrivateRoute>}/>
-          <Route path='/deck/:id/review' element={<PrivateRoute><DuePage /></PrivateRoute>}/>
-          <Route path='/card/:id' element={<PrivateRoute><CardPage /></PrivateRoute>}/>
-          <Route path='/user' element={<PrivateRoute><UserPage /></PrivateRoute>}/>
-        </Routes>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<PrivateRoute><HomePage /></PrivateRoute>}/>
+        <Route path='/signin' element={<SignInPage/>} />
+        <Route path='/signup' element={<SignUpPage/>}/>
+        <Route path='/deck/:id' element={<PrivateRoute><DeckPage /></PrivateRoute>}/>
+        <Route path='/deck/:id/review' element={<PrivateRoute><DuePage /></PrivateRoute>}/>
+        <Route path='/card/:id' element={<PrivateRoute><CardPage /></PrivateRoute>}/>
+        <Route path='/user' element={<PrivateRoute><UserPage /></PrivateRoute>}/>
+      </Routes>
+    </Router>
   )
 }
 

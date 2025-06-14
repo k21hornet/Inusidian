@@ -1,9 +1,12 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import { Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 const Header = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
 
   const logout = async () => {
@@ -19,41 +22,51 @@ const Header = () => {
   }
 
   return (
-    <header className='w-full shadow text-indigo-900'>
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8">
-        <div>
-          <Link to="/" className="text-2xl font-bold hover:text-indigo-600">INUSIDIAN</Link>
-        </div>
+    <AppBar position='static'>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant='h5'
+            sx={{ flexGrow: 1, fontWeight: 600 }}
+            onClick={() => navigate("/")}
+          >INUSIDIAN</Typography>
 
-        <div className="flex space-x-6 items-center w-10">
-          <button className='bg-indigo-100 rounded-full' onClick={() => setDropdownOpen(!dropdownOpen)}>
-            <img src={import.meta.env.VITE_LINK + "/ikemen.png"} alt="X" className='rounded-full'/>
-          </button>
-        </div>
+          <Box sx={{ flexGrow: 0 }}>
+            <NotificationsNoneIcon />
 
-        {dropdownOpen && (
-          <div className="absolute top-12 right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 z-50">
-            <Link
-              to="/user"
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline"
-              onClick={() => setDropdownOpen(false)}
-            >
-              User Info
-            </Link>
-            <button
-              onClick={() => {
-                setDropdownOpen(false)
-                logout()
+            <Tooltip title="Open settings">
+              <IconButton onClick={e => setDropdownOpen(e.currentTarget)} sx={{ p: 0 }}>
+                <Avatar alt="Ikemen" src={import.meta.env.VITE_LINK + "/ikemen.png"} />
+              </IconButton>
+            </Tooltip>
+
+            <Menu
+              sx={{ mt: '45px' }}
+              anchorEl={dropdownOpen}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
               }}
-              className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(dropdownOpen)}
+              onClose={() => setDropdownOpen(null)}
             >
-              Logout
-            </button>
-          </div>
-        )}
-
-      </nav>
-    </header>
+              <MenuItem>
+                <Link to={"/user"}>
+                  <Typography sx={{ textAlign: 'center' }}>Profile</Typography>
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={logout}>
+                <Typography sx={{ textAlign: 'center' }}>Logout</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   )
 }
 

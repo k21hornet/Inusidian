@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
-import BaseTemplate from '../components/templates/BaseTemplate'
 import type { Card } from '../types/Card'
+import BaseLayout from '../components/layout/BaseLayout'
 
 const CardPage = () => {
   const [card, setCard] = useState<Card>()
@@ -89,7 +89,7 @@ const CardPage = () => {
   }
 
   return (
-    <BaseTemplate>
+    <BaseLayout>
 
       <div className="flex flex-col items-center w-full max-w-200">
         <h1 className='text-3xl my-10'>Card Details</h1>
@@ -215,7 +215,7 @@ const CardPage = () => {
         </div>
       )}
 
-    </BaseTemplate>
+    </BaseLayout>
   )
 }
 

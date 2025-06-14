@@ -2,8 +2,10 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import {  Navigate, useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
-import BaseTemplate from '../components/templates/BaseTemplate'
 import type { Deck } from '../types/Deck'
+import BaseLayout from '../components/layout/BaseLayout'
+import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
+import FolderIcon from '@mui/icons-material/Folder';
 
 const HomePage = () => {
   const navigate = useNavigate()
@@ -69,12 +71,19 @@ const HomePage = () => {
 
 
   return (
-    <BaseTemplate>
+    <BaseLayout>
 
-      <div className="flex flex-col items-center w-full max-w-5xl">
-        <h1 className='text-4xl my-10'>Welcome Back!</h1>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: 4
+        }}
+      >
+        <Typography variant='h4'>Welcome Back!</Typography>
 
-        <ul 
+        {/* <ul 
           className="w-full divide-y divide-gray-100 overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 300px)' }}
         >
@@ -101,7 +110,34 @@ const HomePage = () => {
             </div>
           </li>
         ))}
-        </ul>
+        </ul> */}
+        <List sx={{ width: '100%'}}>
+          {decks.map((deck) => (
+            <ListItem
+              secondaryAction={
+                <button 
+                onClick={(e) => {
+                  e.stopPropagation() // 親要素にイベントがバブリングしない
+                  navigate(`deck/${deck?.id}/review`)
+                }} 
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >Review</button>
+              }
+              key={deck.id}
+              onClick={() => navigateToDeck(deck.id)}
+            >
+              <ListItemAvatar>
+                <Avatar>
+                  <FolderIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={deck?.deckName}
+                secondary={deck?.deckDescription}
+              ></ListItemText>
+            </ListItem>
+          ))}
+        </List>
 
         <div className='w-64 flex flex-col items-center mt-5'>
           <button 
@@ -109,7 +145,7 @@ const HomePage = () => {
             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >Create Deck</button>
         </div>
-      </div>
+      </Box>
 
       {showModal && (
         <div
@@ -160,7 +196,7 @@ const HomePage = () => {
         </div>
       )}
     
-    </BaseTemplate>
+    </BaseLayout>
   )
 }
 

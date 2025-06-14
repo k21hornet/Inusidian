@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import BaseTemplate from '../components/templates/BaseTemplate'
 import type { Deck } from '../types/Deck'
 import type { Card } from '../types/Card'
+import BaseLayout from '../components/layout/BaseLayout'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 
 const DeckPage = () => {
   const [deck, setDeck] = useState<Deck>()
@@ -124,12 +126,19 @@ const DeckPage = () => {
   },[])
 
   return (
-    <BaseTemplate>
+    <BaseLayout>
 
-      <div className="flex flex-col items-center w-full max-w-5xl">
-        <h1 className='text-3xl my-10'>{deck?.deckName}</h1>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: 4
+        }}
+      >
+        <Typography variant='h4'>{deck?.deckName}</Typography>
 
-        <ul 
+        {/* <ul 
           className="w-full divide-y divide-gray-100 overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 300px)' }}
         >
@@ -146,7 +155,33 @@ const DeckPage = () => {
               <div className='w-2/12'>{formatDate(card?.createdAt)}</div>
             </li>
           ))}
-        </ul>
+        </ul> */}
+
+        <Box sx={{ width: '100%', overflow: 'hidden'}}>
+          <TableContainer sx={{ maxHeight: 'calc(100vh - 260px)' }}>
+            <Table stickyHeader>
+
+              <TableHead>
+                <TableRow>
+                  <TableCell>Word</TableCell>
+                  <TableCell>Sentence</TableCell>
+                  <TableCell>Created At</TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {cards.map((card) => (
+                  <TableRow key={card.id} onClick={() => navigate(`/card/${card.id}`)}>
+                    <TableCell>{card?.word}</TableCell>
+                    <TableCell>{card?.sentence}</TableCell>
+                    <TableCell>{formatDate(card?.createdAt)}</TableCell>
+                </TableRow>
+                ))}
+              </TableBody>
+
+            </Table>
+          </TableContainer>
+        </Box>
 
         <div className='w-64 flex mt-5'>
           <button 
@@ -159,7 +194,7 @@ const DeckPage = () => {
             >Create Card</button>
         </div>
 
-      </div>
+      </Box>
 
       {showModal && (
         <div
@@ -300,7 +335,7 @@ const DeckPage = () => {
         </div>
       )}
 
-    </BaseTemplate>
+    </BaseLayout>
   )
 }
 

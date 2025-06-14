@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import BaseTemplate from '../components/templates/BaseTemplate'
 import type { Due } from '../types/Due'
+import BaseLayout from '../components/layout/BaseLayout'
 
 const DuePage = () => {
   const [dueCard, setDueCard] = useState<Due | null>()
@@ -65,7 +66,7 @@ const DuePage = () => {
   },[])
 
   return (
-    <BaseTemplate>
+    <BaseLayout>
 
       <div className="flex flex-col items-center w-full max-w-200">
         <h1 className='text-3xl my-10'>Study Now</h1>
@@ -153,7 +154,7 @@ const DuePage = () => {
 
       )}
 
-    </BaseTemplate>
+    </BaseLayout>
   )
 }
 
