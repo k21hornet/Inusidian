@@ -32,7 +32,7 @@ const Header = () => {
           >INUSIDIAN</Typography>
 
           <Box sx={{ flexGrow: 0 }}>
-            <NotificationsNoneIcon />
+            <NotificationsNoneIcon sx={{ marginRight: 2 }}/>
 
             <Tooltip title="Open settings">
               <IconButton onClick={e => setDropdownOpen(e.currentTarget)} sx={{ p: 0 }}>

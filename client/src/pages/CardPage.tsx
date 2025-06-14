@@ -120,16 +120,19 @@ const CardPage = () => {
 
         <Typography variant='h5' align='center' sx={{ marginTop: 4, fontStyle: 'italic' }}>{card?.translate}</Typography>
 
-        <div className='w-64 flex mt-5'>
-          <button 
+        <Box marginTop={2} sx={{ display: 'flex' }}>
+          <Button
             onClick={() => navigate(`/deck/${card?.deckId}`)}
-            className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Back</button>
-          <button 
-            onClick={openModal} 
-            className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Edit</button>
-        </div>
+            variant="contained"
+            sx={{ margin: 1}}
+          >Back</Button>
+
+          <Button
+            onClick={openModal}
+            variant="contained"
+            sx={{ margin: 1}}
+          >Edit</Button>
+        </Box>
       </Box>      
 
       <Modal

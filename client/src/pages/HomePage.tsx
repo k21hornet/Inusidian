@@ -98,13 +98,13 @@ const HomePage = () => {
           {decks.map((deck) => (
             <ListItem
               secondaryAction={
-                <button 
-                onClick={(e) => {
-                  e.stopPropagation() // 親要素にイベントがバブリングしない
-                  navigate(`deck/${deck?.id}/review`)
-                }} 
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >Review</button>
+                <Button 
+                  variant="contained"
+                  onClick={(e) => {
+                    e.stopPropagation() // 親要素にイベントがバブリングしない
+                    navigate(`deck/${deck?.id}/review`)
+                  }}
+                >Review</Button>
               }
               key={deck.id}
               onClick={() => navigateToDeck(deck.id)}
@@ -123,10 +123,10 @@ const HomePage = () => {
         </List>
 
         <div className='w-64 flex flex-col items-center mt-5'>
-          <button 
+          <Button 
+            variant="contained"
             onClick={openModal} 
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Create Deck</button>
+            >Create Deck</Button>
         </div>
       </Box>
 

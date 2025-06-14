@@ -3,14 +3,25 @@ import { useUser } from '../contexts/UserContext'
 import axios from 'axios'
 import { Navigate, useNavigate } from 'react-router-dom'
 import BaseLayout from '../components/layout/BaseLayout'
-import { Box, Typography } from '@mui/material'
+import { Box, Button, FormControl, FormLabel, Modal, TextField, Typography } from '@mui/material'
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  width: 500
+}
 
 const UserPage = () => {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [newPasswordConfirm, setNewPasswordCofirm] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
@@ -41,7 +52,7 @@ const UserPage = () => {
       const res = await axios.post(`${import.meta.env.VITE_API}/user/update`, updateUser, {withCredentials: true})
       alert("User Update Success!")
       if (res.data) {
-        navigate("/login")
+        navigate("/signin")
       }
     } catch (e) {
       console.log(e)      
@@ -81,108 +92,130 @@ const UserPage = () => {
       >
         <Typography variant='h4'>User Info</Typography>
 
-        <div className='w-full max-w-md'>
-          <form onSubmit={update} className='space-y-6'>
-            <div>
-              <label className="block text-sm/6 font-medium text-gray-900">ユーザー名</label>
-              <input
-                type="username"
-                name="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-              />
-            </div>
+        <Box sx={{ width: 400}}>
+          <Box 
+          component="form" 
+          onSubmit={update}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}>
+            <FormControl>
+              <FormLabel htmlFor='username'>Username</FormLabel>
+                <TextField
+                  id='username'
+                  type='text'
+                  name='username'
+                  placeholder="smith2025"
+                  required
+                  value={username}
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+                  fullWidth
+                />
+            </FormControl>
 
-            <div>
-              <label className="block text-sm/6 font-medium text-gray-900">メールアドレス</label>
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-              />
-            </div>
+            <FormControl>
+              <FormLabel htmlFor='email'>Email</FormLabel>
+                <TextField
+                  id='email'
+                  type='email'
+                  name='email'
+                  placeholder="your@email.com"
+                  required
+                  value={email}
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                  fullWidth
+                />
+            </FormControl>
 
-            <button 
-              type="submit" 
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Update UserInfo</button>
-          </form>
+            <Button
+              type='submit'
+              variant="contained"
+              fullWidth
+            >Update User Info</Button>
 
-            <button 
-              onClick={openModal} 
-              className="mt-6 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Update Password</button>
-        </div>
-
+            <Button
+              onClick={openModal}
+              variant="contained"
+              fullWidth
+            >Update Password</Button>
+          </Box>
+        </Box>
 
       </Box>
 
-      {showModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={closeModal}
-        >
-          <div 
-            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
-            onClick={(e) => e.stopPropagation()}
+      <Modal
+        open={showModal}
+        onClose={closeModal}
+      >
+        <Box sx={style}>
+          <Typography variant='h5'>Update Password</Typography>
+
+          <Box 
+            component="form" 
+            onSubmit={updatePassword}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              gap: 2,
+            }}
           >
-            <h3 className='text-xl font-semibold text-center mb-4'>Update Password</h3>
 
-            <form onSubmit={updatePassword} className='space-y-6'>
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Current Password</label>
-                <input
-                  type="text"
-                  name="oldPassword"
+            <FormControl>
+              <FormLabel htmlFor='old-password'>Old Password</FormLabel>
+                <TextField
+                  id='old-password'
+                  type='password'
+                  name='oldPassword'
+                  placeholder="••••••"
+                  required
                   value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setOldPassword(e.target.value)}
+                  fullWidth
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">New Password</label>
-                <input
-                  type="text"
-                  name="newPassword"
+            <FormControl>
+              <FormLabel htmlFor='new-password'>New Password</FormLabel>
+                <TextField
+                  id='new-password'
+                  type='password'
+                  name='newPassword'
+                  placeholder="••••••"
+                  required
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
+                  fullWidth
+                />
+            </FormControl>
+  
+            <FormControl>
+              <FormLabel htmlFor='new-password-confirm'>New Password Confirm</FormLabel>
+                <TextField
+                  id='new-password-confirm'
+                  type='password'
+                  name='newPasswordConfirm'
+                  placeholder="••••••"
                   required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">New Password Confirm</label>
-                <input
-                  type="text"
-                  name="newPasswordConfirm"
                   value={newPasswordConfirm}
-                  onChange={(e) => setNewPasswordCofirm(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setNewPasswordConfirm(e.target.value)}
+                  fullWidth
                 />
-              </div>
+            </FormControl>
 
-              <button 
-                type="submit" 
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Save</button>
-
-            </form>
-
-            <div className='text-end'>
-              <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
-            </div>
-
-          </div>
-        </div>
-      )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              Save
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
 
     </BaseLayout>
   )

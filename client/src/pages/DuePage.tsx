@@ -3,7 +3,21 @@ import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import type { Due } from '../types/Due'
 import BaseLayout from '../components/layout/BaseLayout'
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Modal, Typography } from '@mui/material'
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  width: 400,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}
 
 const DuePage = () => {
   const [dueCard, setDueCard] = useState<Due | null>()
@@ -136,33 +150,28 @@ const DuePage = () => {
         </Box>
       </Box>
 
-      {showModal && dueCard && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={closeModal}
-        >
-          <div 
-            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
-          >
-            <h3 className='text-center text-2xl'>Are you ready? ({cardCount})</h3>
-            <br />
-            <div className='flex'>
-              <button 
-                onClick={() => navigate("/")} 
-                type="submit" 
-                className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Back</button>
+      <Modal
+        open={showModal}
+        onClose={closeModal}
+      >
+        <Box sx={style}>
+          <Typography variant='h5'>Are you ready? ({cardCount})</Typography>
 
-              <button 
-                onClick={closeModal} 
-                type="submit" 
-                className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Start</button>
-            </div>
-          </div>
-        </div>
+          <Box marginTop={4} sx={{ display: 'flex' }}>
+            <Button
+              onClick={() => navigate("/")}
+              variant="contained"
+              sx={{ margin: 2}}
+            >Back</Button>
 
-      )}
+            <Button
+              onClick={closeModal}
+              variant="contained"
+              sx={{ margin: 2}}
+            >Start</Button>
+          </Box>
+        </Box>
+      </Modal>
 
     </BaseLayout>
   )
