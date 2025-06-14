@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
-import AuthTemplate from '../components/templates/AuthTemplate'
-import AuthForm from '../components/organisms/AuthForm'
+import { Box, Button, Card, Container, FormControl, FormLabel, Link, TextField, Typography } from '@mui/material'
 
 const SignInPage = () => {
   const [email, setEmail] = useState("")
@@ -30,22 +29,73 @@ const SignInPage = () => {
   }
 
   return (
-    <AuthTemplate title="Sign In">
+    <Container maxWidth="sm">
+      <Card sx={{ padding: 4, marginTop: 16 }}>
+        <Typography
+          variant='h4'
+        >
+          Sign in
+        </Typography>
 
-      <AuthForm
-        onSubmit={handleLogin}
-        submitText="Sign In"
-        fields={[
-          { label: 'Email',    type: 'email',    name: 'email',    value: email,    onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value) },
-          { label: 'Password', type: 'password', name: 'password', value: password, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value) },
-        ]}
-      />
+        <Box 
+          component="form" 
+          onSubmit={handleLogin}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}
+        >
+          <FormControl>
+            <FormLabel htmlFor='email'>Email</FormLabel>
+              <TextField
+                id='email'
+                type='email'
+                name='email'
+                placeholder="your@email.com"
+                required
+                value={email}
+                onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                fullWidth
+              />
+          </FormControl>
 
-      <p className='mt-10 text-center text-sm/6'>
-        <Link to={"/signup"} className="font-semibold text-indigo-600 hover:text-indigo-500">If you don't have any account, click here.</Link>
-      </p>
+          <FormControl>
+            <FormLabel htmlFor='password'>Password</FormLabel>
+              <TextField
+                id='password'
+                type='password'
+                name='password'
+                placeholder="••••••"
+                required
+                value={password}
+                onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                fullWidth
+              />
+          </FormControl>
 
-    </AuthTemplate>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+          >
+            Sign in
+          </Button>
+        </Box>
+
+        <Typography sx={{ textAlign: 'center' }}>
+          Don&apos;t have an account?{' '}
+          <Link
+            href="/signup"
+            variant="body2"
+            sx={{ alignSelf: 'center' }}
+          >
+            Sign up
+          </Link>
+        </Typography>
+      </Card>
+    </Container>
   )
 }
 
