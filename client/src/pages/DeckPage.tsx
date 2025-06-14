@@ -1,9 +1,21 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import BaseTemplate from '../components/templates/BaseTemplate'
 import type { Deck } from '../types/Deck'
 import type { Card } from '../types/Card'
+import BaseLayout from '../components/layout/BaseLayout'
+import { Box, Button, FormControl, FormLabel, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  width: 700
+}
 
 const DeckPage = () => {
   const [deck, setDeck] = useState<Deck>()
@@ -124,183 +136,219 @@ const DeckPage = () => {
   },[])
 
   return (
-    <BaseTemplate>
+    <BaseLayout>
 
-      <div className="flex flex-col items-center w-full max-w-5xl">
-        <h1 className='text-3xl my-10'>{deck?.deckName}</h1>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: 4
+        }}
+      >
+        <Typography variant='h4'>{deck?.deckName}</Typography>
 
-        <ul 
-          className="w-full divide-y divide-gray-100 overflow-y-auto"
-          style={{ maxHeight: 'calc(100vh - 300px)' }}
-        >
-          <li className="flex font-bold justify-between py-2 bg-white sticky top-0 z-10">
-            <div className='w-2/12'>Word</div>
-            <div className='w-8/12'>Sentence</div>
-            <div className='w-2/12'>Created At</div>
-          </li>
+        <Box sx={{ width: '100%', overflow: 'hidden'}}>
+          <TableContainer sx={{ maxHeight: 'calc(100vh - 260px)' }}>
+            <Table stickyHeader>
 
-          {cards.map((card) => (
-            <li className="flex justify-between py-2" onClick={() => navigate(`/card/${card.id}`)} key={card.id}>
-              <div className='w-2/12 line-clamp-1'>{card?.word}</div>
-              <div className='w-8/12 line-clamp-1'>{card?.sentence}</div>
-              <div className='w-2/12'>{formatDate(card?.createdAt)}</div>
-            </li>
-          ))}
-        </ul>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Word</TableCell>
+                  <TableCell>Sentence</TableCell>
+                  <TableCell>Created At</TableCell>
+                </TableRow>
+              </TableHead>
 
-        <div className='w-64 flex mt-5'>
-          <button 
-            onClick={openModal2} 
-            className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Edit Deck</button>
-          <button 
-            onClick={openModal} 
-            className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Create Card</button>
-        </div>
+              <TableBody>
+                {cards.map((card) => (
+                  <TableRow key={card.id} onClick={() => navigate(`/card/${card.id}`)}>
+                    <TableCell>{card?.word}</TableCell>
+                    <TableCell>{card?.sentence}</TableCell>
+                    <TableCell sx={{ width: 120 }}>{formatDate(card?.createdAt)}</TableCell>
+                </TableRow>
+                ))}
+              </TableBody>
 
-      </div>
+            </Table>
+          </TableContainer>
+        </Box>
 
-      {showModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={closeModal}
-        >
-          <div 
-            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className='text-xl font-semibold text-center mb-4'>Create new card</h3>
+        <Box marginTop={2} sx={{ display: 'flex' }}>
+          <Button
+            onClick={openModal2}
+            variant="contained"
+            sx={{ margin: 1}}
+          >Edit Deck</Button>
 
-            <form onSubmit={createCard} className='space-y-6'>
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Sentence</label>
-                <input
-                  type="text"
-                  name="sentence"
+          <Button
+            onClick={openModal}
+            variant="contained"
+            sx={{ margin: 1}}
+          >Create Card</Button>
+        </Box>
+
+      </Box>
+
+      <Modal
+        open={showModal}
+        onClose={closeModal}
+      >
+        <Box sx={style}>
+          <Typography variant='h5'>Create A New Card</Typography>
+
+          <Box 
+          component="form" 
+          onSubmit={createCard}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}>
+            <FormControl>
+              <FormLabel htmlFor='sentence'>Sentence</FormLabel>
+                <TextField
+                  id='sentence'
+                  type='text'
+                  name='sentence'
+                  required
                   value={sentence}
                   onChange={(e) => setSentence(e.target.value)}
-                  required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  fullWidth
+                  multiline
+                  rows={2}
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Word</label>
-                <input
-                  type="text"
+            <FormControl>
+              <FormLabel htmlFor='word'>Word</FormLabel>
+                <TextField
+                  id='word'
+                  type='text'
                   name="word"
+                  required
                   value={word}
                   onChange={(e) => setWord(e.target.value)}
-                  required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  fullWidth
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Pronounce</label>
-                <input
-                  type="text"
-                  name="pronounce"
+            <FormControl>
+              <FormLabel htmlFor='pronounce'>Pronounce</FormLabel>
+                <TextField
+                  id='pronounce'
+                  type='text'
+                  name='pronounce'
                   value={pronounce}
-                  onChange={(e) => setPronounce(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  onChange={ (e) => setPronounce(e.target.value)}
+                  fullWidth
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Meaning</label>
-                <input
-                  type="text"
-                  name="meaning"
+            <FormControl>
+              <FormLabel htmlFor='meaning'>Meaning</FormLabel>
+                <TextField
+                  id='meaning'
+                  type='text'
+                  name='meaning'
                   value={meaning}
-                  onChange={(e) => setMeaning(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setMeaning(e.target.value)}
+                  fullWidth
+                  multiline
+                  rows={2}
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Translate</label>
-                <input
-                  type="text"
-                  name="translate"
+            <FormControl>
+              <FormLabel htmlFor='translate'>Translate</FormLabel>
+                <TextField
+                  id='translate'
+                  type='text'
+                  name='translate'
                   value={translate}
-                  onChange={(e) => setTranslate(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setTranslate(e.target.value)}
+                  fullWidth
+                  multiline
+                  rows={2}
                 />
-              </div>
+            </FormControl>
 
-              <button 
-                type="submit" 
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Save</button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              Save
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
 
-            </form>
+      <Modal
+        open={showModal2}
+        onClose={closeModal2}
+      >
+        <Box sx={style}>
+          <Typography variant='h5'>Edit This Deck</Typography>
 
-            <div className='text-end'>
-              <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {showModal2 && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={closeModal2}
-        >
-          <div 
-            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className='text-xl font-semibold text-center mb-4'>Edit Deck</h3>
-
-            <form onSubmit={editDeck} className='space-y-6'>
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Deck Name</label>
-                <input
-                  type="text"
-                  name="deckName"
+          <Box 
+          component="form" 
+          onSubmit={editDeck}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}>
+            <FormControl>
+              <FormLabel htmlFor='deckName'>Deck Name</FormLabel>
+                <TextField
+                  id='deckName'
+                  type='text'
+                  name='deckName'
                   value={deckName}
-                  onChange={(e) => setDeckName(e.target.value)}
+                  onChange={ (e) => setDeckName(e.target.value)}
+                  fullWidth
                   required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Description</label>
-                <textarea
-                  name="deckDescription"
+            <FormControl>
+              <FormLabel htmlFor='deckDescription'>Deck Description</FormLabel>
+                <TextField
+                  id='deckDescription'
+                  type='text'
+                  name='deckDescription'
                   value={deckDescription}
-                  onChange={(e) => setDeckDescription(e.target.value)}
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setDeckDescription(e.target.value)}
+                  fullWidth
+                  multiline
+                  rows={2}
                   required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
-              </div>
+            </FormControl>
 
-              <button 
-                type="submit" 
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Save</button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              Save
+            </Button>
 
-              <button 
-                onClick={deleteDeck} 
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Delete this deck</button>
+            <Button
+              onClick={deleteDeck} 
+              fullWidth
+              variant="contained"
+            >
+              Delete
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
 
-            </form>
-
-            <div className='text-end'>
-              <span onClick={closeModal2} style={{color: '#615fff'}}>Close</span>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-    </BaseTemplate>
+    </BaseLayout>
   )
 }
 

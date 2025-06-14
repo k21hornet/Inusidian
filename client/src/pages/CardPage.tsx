@@ -1,8 +1,20 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
-import BaseTemplate from '../components/templates/BaseTemplate'
 import type { Card } from '../types/Card'
+import BaseLayout from '../components/layout/BaseLayout'
+import { Box, Button, FormControl, FormLabel, Modal, TextField, Typography } from '@mui/material'
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  width: 700
+}
 
 const CardPage = () => {
   const [card, setCard] = useState<Card>()
@@ -89,133 +101,144 @@ const CardPage = () => {
   }
 
   return (
-    <BaseTemplate>
+    <BaseLayout>
 
-      <div className="flex flex-col items-center w-full max-w-200">
-        <h1 className='text-3xl my-10'>Card Details</h1>
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%'
+      }}>
 
-        <ul className="w-full divide-y divide-gray-100 flex flex-col items-center">
-          <li className="flex text-xl justify-between py-2 text-center">
-            <div>{card?.sentence}</div>
-          </li>
-          <li className="flex text-xl justify-between py-2 text-center">
-            <div>{card?.word}</div>
-          </li>
-          <li className="flex text-xl justify-between py-2 text-center mb-30">
-            <div>{card?.pronounce}</div>
-          </li>
-          <li className="flex text-xl justify-between py-2 text-center">
-            <div>{card?.meaning}</div>
-          </li>
-          <li className="flex text-xl italic justify-between py-2 text-center">
-            <div>{card?.translate}</div>
-          </li>
-        </ul>
+        <Typography variant='h4' align='center' sx={{ marginTop: 8 }}>{card?.word}</Typography>
 
-        <div className='w-64 flex mt-5'>
-          <button 
+        <Typography variant='h5' align='center' sx={{ marginTop: 4 }}>{card?.sentence}</Typography>
+
+        <Typography variant='h5' align='center' sx={{ marginTop: 4 }}>{card?.pronounce}</Typography>
+
+        <Typography variant='h5' align='center' sx={{ marginTop: 12 }}>{card?.meaning}</Typography>
+
+        <Typography variant='h5' align='center' sx={{ marginTop: 4, fontStyle: 'italic' }}>{card?.translate}</Typography>
+
+        <Box marginTop={2} sx={{ display: 'flex' }}>
+          <Button
             onClick={() => navigate(`/deck/${card?.deckId}`)}
-            className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Back</button>
-          <button 
-            onClick={openModal} 
-            className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Edit</button>
-        </div>
+            variant="contained"
+            sx={{ margin: 1}}
+          >Back</Button>
 
-      </div>
-      
+          <Button
+            onClick={openModal}
+            variant="contained"
+            sx={{ margin: 1}}
+          >Edit</Button>
+        </Box>
+      </Box>      
 
-      {showModal && (
-       <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={closeModal}
-        >
-          <div 
-            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className='text-xl font-semibold text-center mb-4'>Edit card</h3>
+      <Modal
+        open={showModal}
+        onClose={closeModal}
+      >
+        <Box sx={style}>
+          <Typography variant='h5'>Edit This Card</Typography>
 
-            <form onSubmit={editCard} className='space-y-6'>
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Sentence</label>
-                <input
-                  type="text"
-                  name="sentence"
+          <Box 
+          component="form" 
+          onSubmit={editCard}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}>
+            <FormControl>
+              <FormLabel htmlFor='sentence'>Sentence</FormLabel>
+                <TextField
+                  id='sentence'
+                  type='text'
+                  name='sentence'
+                  required
                   value={sentence}
                   onChange={(e) => setSentence(e.target.value)}
-                  required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  fullWidth
+                  multiline
+                  rows={2}
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Word</label>
-                <input
-                  type="text"
+            <FormControl>
+              <FormLabel htmlFor='word'>Word</FormLabel>
+                <TextField
+                  id='word'
+                  type='text'
                   name="word"
+                  required
                   value={word}
                   onChange={(e) => setWord(e.target.value)}
-                  required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  fullWidth
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Pronounce</label>
-                <input
-                  type="text"
-                  name="pronounce"
+            <FormControl>
+              <FormLabel htmlFor='pronounce'>Pronounce</FormLabel>
+                <TextField
+                  id='pronounce'
+                  type='text'
+                  name='pronounce'
                   value={pronounce}
-                  onChange={(e) => setPronounce(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  onChange={ (e) => setPronounce(e.target.value)}
+                  fullWidth
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Meaning</label>
-                <input
-                  type="text"
-                  name="meaning"
+            <FormControl>
+              <FormLabel htmlFor='meaning'>Meaning</FormLabel>
+                <TextField
+                  id='meaning'
+                  type='text'
+                  name='meaning'
                   value={meaning}
-                  onChange={(e) => setMeaning(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setMeaning(e.target.value)}
+                  fullWidth
+                  multiline
+                  rows={2}
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Translate</label>
-                <input
-                  type="text"
-                  name="translate"
+            <FormControl>
+              <FormLabel htmlFor='translate'>Translate</FormLabel>
+                <TextField
+                  id='translate'
+                  type='text'
+                  name='translate'
                   value={translate}
-                  onChange={(e) => setTranslate(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setTranslate(e.target.value)}
+                  fullWidth
+                  multiline
+                  rows={2}
                 />
-              </div>
+            </FormControl>
 
-              <button 
-                type="submit" 
-                className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Save</button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              Save
+            </Button>
 
-              <button 
-                onClick={deleteCard} 
-                className="m-1 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Delete this card</button>
+            <Button
+              onClick={deleteCard} 
+              fullWidth
+              variant="contained"
+            >
+              Delete
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
 
-            </form>
-
-            <div className='text-end'>
-              <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-    </BaseTemplate>
+    </BaseLayout>
   )
 }
 

@@ -1,9 +1,8 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
-import AuthTemplate from '../components/templates/AuthTemplate'
-import AuthForm from '../components/organisms/AuthForm'
+import { Box, Button, Card, Container, FormControl, FormLabel, Link, TextField, Typography } from '@mui/material'
 
 const SignUpPage = () => {
   const [username, setUsername] = useState("")
@@ -33,24 +32,101 @@ const SignUpPage = () => {
   }
   
   return (
-    <AuthTemplate title="Sign Up">
+    <Container maxWidth="sm">
+      <Card sx={{ padding: 4, marginTop: 16 }}>
+        <Typography
+          variant='h4'
+        >
+          Sign up
+        </Typography>
 
-      <AuthForm
-        onSubmit={handleRegister}
-        submitText="Sign Up"
-        fields={[
-          { label: 'User Name',        type: 'text',     name: 'username',        value: username,        onChange: (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value) },
-          { label: 'Email',            type: 'email',    name: 'email',           value: email,           onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value) },
-          { label: 'Password',         type: 'password', name: 'password',        value: password,        onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value) },
-          { label: 'Password Confirm', type: 'password', name: 'passwordConfirm', value: passwordConfirm, onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value) },
-        ]}
-      />
+        <Box 
+          component="form" 
+          onSubmit={handleRegister}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}
+        >
+          <FormControl>
+            <FormLabel htmlFor='username'>Username</FormLabel>
+              <TextField
+                id='username'
+                type='text'
+                name='username'
+                placeholder="smith2025"
+                required
+                value={username}
+                onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+                fullWidth
+              />
+          </FormControl>
 
-      <p className='mt-10 text-center text-sm/6'>
-        <Link to={"/signin"} className="font-semibold text-indigo-600 hover:text-indigo-500">If you have an account, click here.</Link>
-      </p>
+          <FormControl>
+            <FormLabel htmlFor='email'>Email</FormLabel>
+              <TextField
+                id='email'
+                type='email'
+                name='email'
+                placeholder="your@email.com"
+                required
+                value={email}
+                onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                fullWidth
+              />
+          </FormControl>
 
-    </AuthTemplate>
+          <FormControl>
+            <FormLabel htmlFor='password'>Password</FormLabel>
+              <TextField
+                id='password'
+                type='password'
+                name='password'
+                placeholder="••••••"
+                required
+                value={password}
+                onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                fullWidth
+              />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel htmlFor='password-confirm'>Password Confirm</FormLabel>
+              <TextField
+                id='password-confirm'
+                type='password'
+                name='passwordConfirm'
+                placeholder="••••••"
+                required
+                value={passwordConfirm}
+                onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
+                fullWidth
+              />
+          </FormControl>
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+          >
+            Sign up
+          </Button>
+        </Box>
+
+        <Typography sx={{ textAlign: 'center' }}>
+          Already have an account?{' '}
+          <Link
+            href="/signin"
+            variant="body2"
+            sx={{ alignSelf: 'center' }}
+          >
+            Sign in
+          </Link>
+        </Typography>
+      </Card>
+    </Container>
   )
 }
 
