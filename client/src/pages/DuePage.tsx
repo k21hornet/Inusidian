@@ -42,6 +42,7 @@ const DuePage = () => {
         setDueCard(res.data[randomNum])
         setCardCount(res.data.length)
       } else {
+        setShowModal(false)
         setDueCard(null)
       }
     } catch (e) {
@@ -102,12 +103,14 @@ const DuePage = () => {
               <Typography variant='h5' align='center' sx={{ marginTop: 4 }}>{dueCard?.card?.sentence}</Typography>
               <Typography variant='h5' align='center' sx={{ marginTop: 4 }}>{dueCard?.card?.pronounce}</Typography>
 
-              <button
+              <Typography
+                variant='h6'
+                sx={{ marginTop: 2 }}
                 onClick={toggleAnswers}
                 className="flex items-center gap-2 text-indigo-600 font-semibold hover:underline"
               >
                 Answer {showAnswers ? " - " : " + "}
-              </button>
+              </Typography>
 
               {showAnswers && (
                 <>
@@ -117,35 +120,34 @@ const DuePage = () => {
               )}
 
 
-              <div className='flex mt-8'>
-                <div className='flex flex-col items-center m-1'>
-                  <p className='text-gray-500'>0 day</p>
-                  <button 
-                    onClick={failure} 
-                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >Again</button>
-                </div>
+              <Box sx={{ display: 'flex', marginTop: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: 1 }}>
+                  <p>0 day</p>
+                  <Button 
+                    onClick={failure}
+                    variant="contained"
+                  >Again</Button>
+                </Box>
                 
-                <div className='flex flex-col items-center m-1'>
-                  <p className='text-gray-500'>{dueCard?.nextDateDiff} day</p>
-                  <button 
-                    onClick={success} 
-                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >Easy</button>
-                </div>
-              </div>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: 1 }}>
+                  <p>{dueCard?.nextDateDiff} day</p>
+                  <Button 
+                    onClick={success}
+                    variant="contained"
+                  >Easy</Button>
+                </Box>
+              </Box>
             </>
           ) : (
-            <div className="text-center">
-              <h2 className="text-4xl font-bold text-green-600">Congratulations!</h2>
-              <p className="mt-2 text-xl text-gray-700">You have finished this deck for now.</p>
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography variant='h3'>Congratulations!</Typography>
+              <p>You have finished this deck for now.</p>
               <Link
                 to={`/deck/${id}`}
-                className="mt-4 inline-block text-blue-600 hover:underline"
               >
                 Back to deck
               </Link>
-            </div>
+            </Box>
           )}
         </Box>
       </Box>

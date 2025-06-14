@@ -31,7 +31,7 @@ const Header = () => {
             onClick={() => navigate("/")}
           >INUSIDIAN</Typography>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
             <NotificationsNoneIcon sx={{ marginRight: 2 }}/>
 
             <Tooltip title="Open settings">
