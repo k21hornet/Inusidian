@@ -2,8 +2,21 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import {  Navigate, useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
-import BaseTemplate from '../components/templates/BaseTemplate'
 import type { Deck } from '../types/Deck'
+import BaseLayout from '../components/layout/BaseLayout'
+import { Avatar, Box, Button, FormControl, FormLabel, List, ListItem, ListItemAvatar, ListItemText, Modal, TextField, Typography } from '@mui/material'
+import FolderIcon from '@mui/icons-material/Folder';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  width: 700
+}
 
 const HomePage = () => {
   const navigate = useNavigate()
@@ -69,98 +82,110 @@ const HomePage = () => {
 
 
   return (
-    <BaseTemplate>
+    <BaseLayout>
 
-      <div className="flex flex-col items-center w-full max-w-5xl">
-        <h1 className='text-4xl my-10'>Welcome Back!</h1>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: 4
+        }}
+      >
+        <Typography variant='h4'>Welcome Back!</Typography>
 
-        <ul 
-          className="w-full divide-y divide-gray-100 overflow-y-auto"
-          style={{ maxHeight: 'calc(100vh - 300px)' }}
-        >
-        {decks.map((deck) => (
-          <li className="flex justify-between py-2" key={deck.id}>
-            <div onClick={() => navigateToDeck(deck.id)} className='flex items-center'>
-              <div
-                className="d-flex justify-content-center align-items-center rounded-full text-white"
-                style={{width: '40px', height: '40px', marginRight: '16px' , backgroundColor: '#aaa'}}
-              >
-              </div>
-
-              <div>
-                <div className='text-xl'>{deck?.deckName}</div>
-                <div className="italic">{deck?.deckDescription}</div>
-              </div>
-            </div>
-
-            <div className='flex items-center'>
-              <button 
-                onClick={() => navigate(`deck/${deck?.id}/review`)} 
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >Review</button>
-            </div>
-          </li>
-        ))}
-        </ul>
+        <List sx={{ width: '100%'}}>
+          {decks.map((deck) => (
+            <ListItem
+              secondaryAction={
+                <Button 
+                  variant="contained"
+                  onClick={(e) => {
+                    e.stopPropagation() // 親要素にイベントがバブリングしない
+                    navigate(`deck/${deck?.id}/review`)
+                  }}
+                >Review</Button>
+              }
+              key={deck.id}
+              onClick={() => navigateToDeck(deck.id)}
+            >
+              <ListItemAvatar>
+                <Avatar>
+                  <FolderIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={deck?.deckName}
+                secondary={deck?.deckDescription}
+              ></ListItemText>
+            </ListItem>
+          ))}
+        </List>
 
         <div className='w-64 flex flex-col items-center mt-5'>
-          <button 
+          <Button 
+            variant="contained"
             onClick={openModal} 
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Create Deck</button>
+            >Create Deck</Button>
         </div>
-      </div>
+      </Box>
 
-      {showModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={closeModal}
-        >
-          <div 
-            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4"
-            onClick={(e) => e.stopPropagation()} // モーダル本体のクリックは無視
-          >
-            <h3 className='text-xl font-semibold text-center mb-4'>Add new deck</h3>
+      <Modal
+        open={showModal}
+        onClose={closeModal}
+      >
+        <Box sx={style}>
+          <Typography variant='h5'>Create A New Deck</Typography>
 
-            <form onSubmit={createDeck} className='space-y-6'>
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Deck Name</label>
-                <input
-                  type="text"
-                  name="deckName"
+          <Box 
+          component="form" 
+          onSubmit={createDeck}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}>
+            <FormControl>
+              <FormLabel htmlFor='deckName'>Deck Name</FormLabel>
+                <TextField
+                  id='deckName'
+                  type='text'
+                  name='deckName'
                   value={deckName}
-                  onChange={(e) => setDeckName(e.target.value)}
+                  onChange={ (e) => setDeckName(e.target.value)}
+                  fullWidth
                   required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
-              </div>
+            </FormControl>
 
-              <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Description</label>
-                <textarea
-                  name="deckDescription"
+            <FormControl>
+              <FormLabel htmlFor='deckDescription'>Deck Description</FormLabel>
+                <TextField
+                  id='deckDescription'
+                  type='text'
+                  name='deckDescription'
                   value={deckDescription}
-                  onChange={(e) => setDeckDescription(e.target.value)}
+                  onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setDeckDescription(e.target.value)}
+                  fullWidth
+                  multiline
+                  rows={2}
                   required
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
-              </div>
+            </FormControl>
 
-              <button type="submit" 
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >Save</button>
-
-            </form>
-
-            <div className='text-end'>
-              <span onClick={closeModal} style={{color: '#615fff'}}>Close</span>
-            </div>
-
-          </div>
-        </div>
-      )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              Save
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     
-    </BaseTemplate>
+    </BaseLayout>
   )
 }
 
