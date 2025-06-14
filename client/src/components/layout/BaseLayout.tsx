@@ -11,7 +11,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({children}) => {
     <>
       <Header />
 
-      <Container>
+      <Container maxWidth={'md'}>
         { children }
       </Container>
     </>

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import BaseTemplate from '../components/templates/BaseTemplate'
 import type { Due } from '../types/Due'
 import BaseLayout from '../components/layout/BaseLayout'
+import { Box, Typography } from '@mui/material'
 
 const DuePage = () => {
   const [dueCard, setDueCard] = useState<Due | null>()
@@ -68,15 +68,25 @@ const DuePage = () => {
   return (
     <BaseLayout>
 
-      <div className="flex flex-col items-center w-full max-w-200">
-        <h1 className='text-3xl my-10'>Study Now</h1>
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%'
+      }}>
+        <Typography variant='h6' align='center' sx={{ marginTop: 4 }}>Study Now!!!</Typography>
 
-        <div className='w-full divide-y divide-gray-100 flex flex-col items-center'>
+        <Box sx={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}>
           {dueCard? (
             <>
-              <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.sentence}</p>
-              <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.word}</p>
-              <p className="flex text-xl justify-between py-2 text-center mb-10">{dueCard?.card?.pronounce}</p>
+              <Typography variant='h4' align='center' sx={{ marginTop: 4 }}>{dueCard?.card?.word}</Typography>
+              <Typography variant='h5' align='center' sx={{ marginTop: 4 }}>{dueCard?.card?.sentence}</Typography>
+              <Typography variant='h5' align='center' sx={{ marginTop: 4 }}>{dueCard?.card?.pronounce}</Typography>
 
               <button
                 onClick={toggleAnswers}
@@ -87,8 +97,8 @@ const DuePage = () => {
 
               {showAnswers && (
                 <>
-                  <p className="flex text-xl justify-between py-2 text-center">{dueCard?.card?.meaning}</p>
-                  <p className="flex text-xl justify-between py-2 text-center italic">{dueCard?.card?.translate}</p>
+                  <Typography variant='h5' align='center' sx={{ marginTop: 8 }}>{dueCard?.card?.meaning}</Typography>
+                  <Typography variant='h5' align='center' sx={{ marginTop: 4 }} >{dueCard?.card?.translate}</Typography>
                 </>
               )}
 
@@ -123,8 +133,8 @@ const DuePage = () => {
               </Link>
             </div>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       {showModal && dueCard && (
         <div

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useUser } from '../contexts/UserContext'
 import axios from 'axios'
 import { Navigate, useNavigate } from 'react-router-dom'
-import BaseTemplate from '../components/templates/BaseTemplate'
+import BaseLayout from '../components/layout/BaseLayout'
+import { Box, Typography } from '@mui/material'
 
 const UserPage = () => {
   const [username, setUsername] = useState("")
@@ -68,10 +69,17 @@ const UserPage = () => {
   }
 
   return (
-    <BaseTemplate>
+    <BaseLayout>
 
-      <div className="flex flex-col items-center w-full max-w-5xl">
-        <h1 className='text-3xl my-10'>UserInfo</h1>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: 4
+        }}
+      >
+        <Typography variant='h4'>User Info</Typography>
 
         <div className='w-full max-w-md'>
           <form onSubmit={update} className='space-y-6'>
@@ -112,7 +120,7 @@ const UserPage = () => {
         </div>
 
 
-      </div>
+      </Box>
 
       {showModal && (
         <div
@@ -176,7 +184,7 @@ const UserPage = () => {
         </div>
       )}
 
-    </BaseTemplate>
+    </BaseLayout>
   )
 }
 
