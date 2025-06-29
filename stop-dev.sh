@@ -7,4 +7,4 @@ echo "Stopping Spring Boot backend..."
 pkill -f "GradleDaemon"
 
 echo "Stopping DB (docker-compose)..."
-cd db && docker-compose down
+docker-compose down
