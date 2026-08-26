@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7D7E5FE4303F17E8009FBB5E /* Auth0 in Frameworks */ = {isa = PBXBuildFile; productRef = 7D7E5FE3303F17E8009FBB5E /* Auth0 */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		7D7E5FCE303F14F4009FBB5E /* Inusidian.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Inusidian.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D7E5FE4303F17E8009FBB5E /* Auth0 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = Inusidian;
 			packageProductDependencies = (
+				7D7E5FE3303F17E8009FBB5E /* Auth0 */,
 			);
 			productName = Inusidian;
 			productReference = 7D7E5FCE303F14F4009FBB5E /* Inusidian.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 7D7E5FC5303F14F4009FBB5E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7D7E5FE2303F17E8009FBB5E /* XCRemoteSwiftPackageReference "Auth0" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7D7E5FCF303F14F4009FBB5E /* Products */;
 			projectDirPath = "";
@@ -332,6 +341,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7D7E5FE2303F17E8009FBB5E /* XCRemoteSwiftPackageReference "Auth0" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/Auth0.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7D7E5FE3303F17E8009FBB5E /* Auth0 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7D7E5FE2303F17E8009FBB5E /* XCRemoteSwiftPackageReference "Auth0" */;
+			productName = Auth0;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7D7E5FC6303F14F4009FBB5E /* Project object */;
 }
