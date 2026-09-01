@@ -16,11 +16,21 @@ private struct ErrorResponse: Decodable {
 // バックエンドは LocalDateTime をタイムゾーンなし・可変桁の小数秒付きで返す
 // (例: "2026-09-01T09:22:31.123456") ため、Z 付き ISO8601 前提の
 // ISO8601DateFormatter ではデコードできない。手動でパースする。
-private let backendDateFormatter: DateFormatter = {
+// LocalDate (例: nextReviewDate) は時刻部分を持たない "yyyy-MM-dd" 形式で
+// 返るため、そちらもフォールバックとしてパースする。
+private let backendDateTimeFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.locale = Locale(identifier: "en_US_POSIX")
     formatter.timeZone = TimeZone(secondsFromGMT: 0)
     formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+    return formatter
+}()
+
+private let backendDateOnlyFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.timeZone = TimeZone(secondsFromGMT: 0)
+    formatter.dateFormat = "yyyy-MM-dd"
     return formatter
 }()
 
@@ -29,11 +39,14 @@ private func decodeBackendDate(_ decoder: Decoder) throws -> Date {
     let dateString = try container.decode(String.self)
 
     let parts = dateString.split(separator: ".", maxSplits: 1)
-    guard let date = backendDateFormatter.date(from: String(parts[0])) else {
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "Cannot decode date: \(dateString)"
-        )
+    guard let date = backendDateTimeFormatter.date(from: String(parts[0])) else {
+        guard let dateOnly = backendDateOnlyFormatter.date(from: dateString) else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Cannot decode date: \(dateString)"
+            )
+        }
+        return dateOnly
     }
 
     guard parts.count > 1, let fraction = Double("0.\(parts[1])") else {
@@ -82,6 +95,13 @@ struct APIClient {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .custom { try decodeBackendDate($0) }
         return try decoder.decode(T.self, from: data)
+    }
+
+    // 前後カードID取得エンドポイントは JSON ではなく素のテキストを返すため専用のパーサーを用いる
+    func getText(_ path: String) async throws -> String {
+        let data = try await get(path)
+        return String(decoding: data, as: UTF8.self)
+            .trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: "\"")))
     }
 
     func send<Body: Encodable>(_ path: String, method: String, body: Body) async throws -> Data {

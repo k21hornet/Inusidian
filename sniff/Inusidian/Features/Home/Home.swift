@@ -13,71 +13,97 @@ struct HomeView: View {
     @State private var errorMessage: String?
     
     var body: some View {
-        ZStack {
-            Image("background")
-                .resizable()
-                .ignoresSafeArea()
-            
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Image("inusidian")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 160)
-                        Spacer()
-                        Button{
-                            Task {
-                                await authService.logout()
-                            }
-                        } label: {
-                            Image("logout")
+        NavigationStack {
+            ZStack {
+                Image("background")
+                    .resizable()
+                    .ignoresSafeArea()
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Image("inusidian")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 24)
-                        }
-                    }
-                    .padding(.bottom)
-                    
-                    Text("デッキ一覧")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                    
-                    if isLoading {
-                        ProgressView("デッキを読み込み中...")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding()
-                    } else if let errorMessage = errorMessage {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .padding()
-                    } else if decks.isEmpty {
-                        Text("デッキがありません")
-                            .foregroundColor(.secondary)
-                            .padding()
-                    } else {
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(decks) { deck in
-                                HStack {
-                                    Text(deck.deckName)
-                                        .font(.headline)
-                                    Spacer()
+                                .frame(width: 160)
+                            Spacer()
+                            Button{
+                                Task {
+                                    await authService.logout()
                                 }
-                                .padding()
-                                .background(Color.white.opacity(0.8))
-                                .cornerRadius(8)
+                            } label: {
+                                Image("logout")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24)
                             }
                         }
+                        .padding(.bottom)
+
+                        Text("デッキ一覧")
+                            .font(.title2)
+                            .fontWeight(.bold)
+
+                        if isLoading {
+                            ProgressView("デッキを読み込み中...")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding()
+                        } else if let errorMessage = errorMessage {
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                                .padding()
+                        } else if decks.isEmpty {
+                            Text("デッキがありません")
+                                .foregroundColor(.secondary)
+                                .padding()
+                        } else {
+                            VStack(alignment: .leading, spacing: 8) {
+                                ForEach(decks) { deck in
+                                    NavigationLink(value: Route.deckDetail(deckId: deck.id)) {
+                                        deckRow(deck)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+
+                        Spacer()
                     }
-                    
-                    Spacer()
+                    .padding()
                 }
-                .padding()
+            }
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .deckDetail(let deckId):
+                    DeckDetailView(deckId: deckId, authService: authService)
+                case .cardDetail(let deckId, let cardId):
+                    CardDetailView(deckId: deckId, cardId: cardId, authService: authService)
+                case .review(let deckId):
+                    ReviewView(deckId: deckId, authService: authService)
+                }
             }
         }
         .task {
             await fetchDecks()
         }
+    }
+
+    private func deckRow(_ deck: DeckSummary) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(deck.deckName)
+                    .font(.headline)
+                Text("\(deck.cardCount)枚・復習待ち\(deck.dueCardCount)枚")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .background(Color.white.opacity(0.8))
+        .cornerRadius(8)
     }
     
     private func fetchDecks() async {
@@ -90,6 +116,7 @@ struct HomeView: View {
             let homeAPI = HomeAPI(apiClient: apiClient)
             decks = try await homeAPI.getAllDecks()
         } catch {
+            print("[HomeView] fetchDecks failed: \(error)")
             if error is AuthenticationError {
                 // 認証切れ時は RootView 側でログイン画面に戻す
                 return
