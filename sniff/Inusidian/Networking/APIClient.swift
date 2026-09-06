@@ -97,13 +97,6 @@ struct APIClient {
         return try decoder.decode(T.self, from: data)
     }
 
-    // 前後カードID取得エンドポイントは JSON ではなく素のテキストを返すため専用のパーサーを用いる
-    func getText(_ path: String) async throws -> String {
-        let data = try await get(path)
-        return String(decoding: data, as: UTF8.self)
-            .trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: "\"")))
-    }
-
     func send<Body: Encodable>(_ path: String, method: String, body: Body) async throws -> Data {
         var request = try await makeRequest(path, method: method)
         request.httpBody = try JSONEncoder().encode(body)

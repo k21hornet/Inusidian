@@ -177,10 +177,10 @@ struct ReviewView: View {
             let apiClient = APIClient(authService: authService)
             let cardAPI = CardAPI(apiClient: apiClient)
             if success {
-                try await cardAPI.reviewSuccess(id: card.id, answerTime: answerTime)
+                try await cardAPI.reviewSuccess(deckId: deckId, id: card.id, answerTime: answerTime)
                 dueCards.removeAll { $0.id == card.id }
             } else {
-                try await cardAPI.reviewFailure(id: card.id, answerTime: answerTime)
+                try await cardAPI.reviewFailure(deckId: deckId, id: card.id, answerTime: answerTime)
             }
             pickNextCard()
         } catch {
