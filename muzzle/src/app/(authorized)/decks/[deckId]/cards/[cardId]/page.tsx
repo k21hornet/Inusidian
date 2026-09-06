@@ -2,22 +2,23 @@ import { CardPage } from "@/app/(authorized)/decks/[deckId]/cards/[cardId]/_comp
 import { getCard, getNextCardId, getPrevCardId } from "@/features/card/api";
 
 type Params = {
-  params: Promise<{ cardId: number }>;
+  params: Promise<{ deckId: number; cardId: number }>;
 };
 
 export default async function Card({ params }: Params) {
-  const { cardId } = await params;
+  const { deckId, cardId } = await params;
 
-  const cardResponse = await getCard(cardId);
+  const cardResponse = await getCard(deckId, cardId);
   if (cardResponse.error) return;
   const card = cardResponse.body;
 
   const [nextCardResponse, prevCardResponse] = await Promise.all([
-    getNextCardId(card.deckId, cardId),
-    getPrevCardId(card.deckId, cardId),
+    getNextCardId(deckId, cardId),
+    getPrevCardId(deckId, cardId),
   ]);
-  const nextCardId = nextCardResponse.body;
-  const prevCardId = prevCardResponse.body;
+  // 新APIは { cardId: string | null } を返す（旧APIの生文字列レスポンスとは形が異なる）
+  const nextCardId = nextCardResponse.body?.cardId ?? "";
+  const prevCardId = prevCardResponse.body?.cardId ?? "";
 
   return (
     <CardPage card={card} nextCardId={nextCardId} prevCardId={prevCardId} />

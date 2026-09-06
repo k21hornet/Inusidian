@@ -26,8 +26,6 @@ export type CardValue = {
 };
 
 export type PostCardFormData = {
-  cardId?: number;
-  deckId?: number;
   values: {
     cardFieldId: number;
     content: string;

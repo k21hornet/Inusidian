@@ -118,7 +118,7 @@ struct CardDetailView: View {
         do {
             let apiClient = APIClient(authService: authService)
             let cardAPI = CardAPI(apiClient: apiClient)
-            async let cardResult = cardAPI.getCard(id: cardId)
+            async let cardResult = cardAPI.getCard(deckId: deckId, id: cardId)
             async let nextResult = cardAPI.getNextCardId(deckId: deckId, cardId: cardId)
             async let prevResult = cardAPI.getPrevCardId(deckId: deckId, cardId: cardId)
             card = try await cardResult

@@ -16,7 +16,6 @@ type Props = {
 export default function CreateCardPage({ deck }: Props) {
   // 各カード属性ごとにcardFieldIdとcontentを持つ
   const [formData, setFormData] = useState<PostCardFormData>({
-    deckId: deck.id,
     values: deck.cardFields.map((field) => ({
       cardFieldId: field.id, // 各フィールドのIDをセット
       content: "",
@@ -35,11 +34,10 @@ export default function CreateCardPage({ deck }: Props) {
   const handleSubmit = async (e: FormEvent<Element>) => {
     e.preventDefault();
 
-    const { error } = await postCard(formData);
+    const { error } = await postCard(deck.id, formData);
     if (!error) {
       // フォームをリセット
       setFormData({
-        deckId: deck.id,
         values: deck.cardFields.map((field) => ({
           cardFieldId: field.id,
           content: "",
@@ -47,6 +45,8 @@ export default function CreateCardPage({ deck }: Props) {
       });
 
       toast.success("カードを作成しました");
+    } else {
+      toast.error("カードの作成に失敗しました");
     }
   };
 

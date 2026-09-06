@@ -22,8 +22,6 @@ export default function CardModal({
   card: Card | undefined;
 }) {
   const [formData, setFormData] = useState<PostCardFormData>({
-    cardId: 0,
-    deckId: 0,
     values: [],
   });
 
@@ -31,8 +29,6 @@ export default function CardModal({
   useEffect(() => {
     if (card) {
       setFormData({
-        cardId: card.id,
-        deckId: card.deckId,
         values: card.cardValues.map((value) => ({
           cardFieldId: value.field.id,
           content: value.content,
@@ -53,18 +49,19 @@ export default function CardModal({
   // カード編集
   const handleSubmit = async (e: FormEvent<Element>) => {
     e.preventDefault();
+    if (!card) return;
 
-    const { error } = await updateCard(formData);
+    const { error } = await updateCard(card.deckId, card.id, formData);
     if (!error) {
       handleClose();
     }
   };
 
   // カード削除
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (deckId: number, id: number) => {
     const confirm = window.confirm("本当に削除しますか？");
     if (!confirm) return;
-    await deleteCard(id);
+    await deleteCard(deckId, id);
     handleClose();
   };
 
@@ -95,7 +92,7 @@ export default function CardModal({
           <div className="flex justify-between">
             <Button
               buttonDesign="secondary"
-              onClick={() => handleDelete(card.id)}
+              onClick={() => handleDelete(card.deckId, card.id)}
               type="button"
             >
               削除

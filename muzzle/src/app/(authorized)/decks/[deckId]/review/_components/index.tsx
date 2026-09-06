@@ -49,7 +49,7 @@ export default function ReviewPage({ data }: { data: Card[] }) {
     if (!dueCard || !startTime) return;
     const endTime = new Date();
     const answerTime = (endTime.getTime() - startTime.getTime()) / 1000;
-    await reviewSuccess(id, answerTime);
+    await reviewSuccess(dueCard.deckId, id, answerTime);
     setDueCards(dueCards.filter((rc) => rc.id !== id)); //正解した問題を除外
     setAccordionValue("");
   };
@@ -59,7 +59,7 @@ export default function ReviewPage({ data }: { data: Card[] }) {
     if (!dueCard || !startTime) return;
     const endTime = new Date();
     const answerTime = (endTime.getTime() - startTime.getTime()) / 1000;
-    await reviewFailure(dueCard.id, answerTime);
+    await reviewFailure(dueCard.deckId, dueCard.id, answerTime);
     setNextReviewCard();
     setAccordionValue("");
     toast.error("残念！");
